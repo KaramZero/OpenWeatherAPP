@@ -1,4 +1,4 @@
-package com.example.openweather.ui.main
+package com.example.openweather.view.main
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,7 +8,6 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.openweather.R
 import com.example.openweather.databinding.FragmentMainBinding
 
 /**

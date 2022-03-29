@@ -1,16 +1,18 @@
-package com.example.openweather.ui.main
+package com.example.openweather.view.main
 
 import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.example.openweather.R
-import com.example.openweather.TodayFragment
-import com.example.openweather.TomorrowFragment
+import com.example.openweather.view.SevenDaysFragment
+import com.example.openweather.view.TodayFragment
+import com.example.openweather.view.TomorrowFragment
 
 private val TAB_TITLES = arrayOf(
     R.string.tab_text_1,
-    R.string.tab_text_2
+    R.string.tab_text_2,
+    R.string.tab_text_3
 )
 
 /**
@@ -23,8 +25,12 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) :
     override fun getItem(position: Int): Fragment {
         var fragment : Fragment? = null
         when(position){
-            0 ->{fragment = TodayFragment()}
-            1 ->{fragment = TomorrowFragment()}
+            0 ->{fragment = TodayFragment()
+            }
+            1 ->{fragment = TomorrowFragment()
+            }
+            2 ->{fragment = SevenDaysFragment()
+            }
         }
         return fragment!!
     }
@@ -35,6 +41,6 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) :
 
     override fun getCount(): Int {
         // Show 2 total pages.
-        return 2
+        return 3
     }
 }
