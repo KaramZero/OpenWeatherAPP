@@ -26,7 +26,7 @@ data class Current(
     @SerializedName("visibility")
     var visibility: Int,
     @SerializedName("wind_speed")
-    var wind_speed: Int,
+    var wind_speed: Double,
     @SerializedName("wind_deg")
     var wind_deg: Int,
     @SerializedName("weather")
@@ -34,5 +34,4 @@ data class Current(
     @SerializedName("rain")
    var rain: Rain
 
-) {
-}
+)

@@ -6,8 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/frogt"
-    tools:context=".view.TomorrowFragment">
-
+    >
     <ImageView
         android:id="@+id/tomorrow_weather_icon"
         android:layout_width="169dp"
@@ -48,8 +47,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="72dp"
-        android:layout_marginEnd="208dp"
+        android:layout_marginTop="68dp"
         android:gravity="center"
         android:text="o"
         android:textSize="30sp"
@@ -67,7 +65,7 @@
         android:text="c"
         android:textSize="55sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.076"
+        app:layout_constraintHorizontal_bias="0.062"
         app:layout_constraintStart_toEndOf="@+id/tomorrow_temp"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -83,17 +81,55 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <TextView
         android:id="@+id/tomorrow_feels_like"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="164dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="172dp"
         android:gravity="center"
-        android:text="feels like 18"
+        android:text="18"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/textView2"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="26dp"
+        android:layout_marginTop="172dp"
+        android:gravity="center"
+        android:text="@string/feels_like"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.107"
+        app:layout_constraintHorizontal_bias="0.045"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="153dp"
+        android:layout_marginTop="335dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tomorrow_weather_description">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/tomorrow_RecyclerView_weather_for24H"
+                android:layout_marginTop="150dp"
+                android:layout_width="match_parent"
+                android:layout_height="100dp" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

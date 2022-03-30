@@ -20,5 +20,4 @@ data class BaseWeather(
     @Ignore
     @SerializedName("daily")
    var daily :List<Daily>
-) {
-}
+)

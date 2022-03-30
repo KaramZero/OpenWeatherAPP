@@ -15,8 +15,12 @@
     <string name="action_settings">Settings</string>
 
 
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_locations">Locations</string>
+    <string name="weather_maps">Weather Maps</string>
+    <string name="about_us">About Us</string>
+    <string name="settings">Setting</string>
+
+    <string name="feels_like">feels like</string>
+
     <string name="title_activity_google_maps">GoogleMapsActivity</string>
 </resources>

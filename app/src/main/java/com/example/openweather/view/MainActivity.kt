@@ -15,10 +15,16 @@ import androidx.drawerlayout.widget.DrawerLayout.DrawerListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
 import com.example.openweather.databinding.ActivityMainBinding
+import com.example.openweather.model.local_source.LocationsLocal
+import com.example.openweather.model.remote_source.WeatherRemote
 import com.example.openweather.model.repo.GpsRepo
+import com.example.openweather.model.repo.WeatherRepo
 import com.example.openweather.view.main.SectionsPagerAdapter
+import com.example.openweather.view.today.TodayFragment
 import com.example.openweather.view_model.gps_view_model.GpsViewModel
 import com.example.openweather.view_model.gps_view_model.factory.GpsViewModelFactory
+import com.example.openweather.view_model.weather_view_model.WeatherViewModel
+import com.example.openweather.view_model.weather_view_model.factory.WeatherViewModelFactory
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -34,6 +40,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object{
         lateinit var gpsViewModel : GpsViewModel
+        lateinit var weatherViewModel : WeatherViewModel
     }
 
 
@@ -48,12 +55,20 @@ class MainActivity : AppCompatActivity() {
         initFloatingButtons()
 
         initDrawer()
-        var fusedLocationProviderClient:FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+        val fusedLocationProviderClient:FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
-        var gpsViewModelFactory = GpsViewModelFactory(GpsRepo.getGpsRepo(this,fusedLocationProviderClient))
+        val gpsViewModelFactory = GpsViewModelFactory(GpsRepo.getGpsRepo(this,fusedLocationProviderClient))
 
         gpsViewModel =ViewModelProvider(this,gpsViewModelFactory)[GpsViewModel::class.java]
         gpsViewModel.getLocation()
+
+
+        val weatherViewModelFactory = WeatherViewModelFactory(WeatherRemote.getInstance()
+            ?.let { WeatherRepo.getInstance(this, it) }!!,LocationsLocal.getInstance(this))
+
+        weatherViewModel = ViewModelProvider(this,weatherViewModelFactory)[WeatherViewModel::class.java]
+
+
 
 
 
@@ -68,7 +83,6 @@ class MainActivity : AppCompatActivity() {
         viewPager.adapter = sectionsPagerAdapter
         val tabs: TabLayout = binding.tabs
         tabs.setupWithViewPager(viewPager)
-
     }
 
     private fun initFloatingButtons(){
@@ -134,8 +148,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun clickOnMe(item: MenuItem) {
-        Toast.makeText(this,"Hi",Toast.LENGTH_SHORT).show()
+     fun clickOnMe(item: MenuItem) {
+        val newFragment = TodayFragment.StartGameDialogFragment()
+        newFragment.show(supportFragmentManager, "Locations")
+        Toast.makeText(this,"Hi", Toast.LENGTH_SHORT).show()
+        drawerLayout.close()
     }
 
 
