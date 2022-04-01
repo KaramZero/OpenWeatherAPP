@@ -15,9 +15,9 @@ import java.util.*
 import kotlin.Int
 import kotlin.collections.ArrayList
 
-class TodayRecyclerAdapter(
+class AllDayRecyclerAdapter(
     private val context: Context
-) : RecyclerView.Adapter<TodayRecyclerAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<AllDayRecyclerAdapter.ViewHolder>() {
 
     private var hourlyTempList: List<Hourly> = ArrayList()
     private var interval : Int = 0

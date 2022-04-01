@@ -1,5 +1,6 @@
 package com.example.openweather.view.tomorrow
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -8,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -15,7 +18,8 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.openweather.R
 import com.example.openweather.model.weather_pojo.BaseWeather
 import com.example.openweather.view.MainActivity
-import com.example.openweather.view.today.TodayRecyclerAdapter
+import com.example.openweather.view.today.AllDayRecyclerAdapter
+import java.util.*
 
 
 class TomorrowFragment : Fragment() {
@@ -37,7 +41,8 @@ class TomorrowFragment : Fragment() {
     private lateinit var feelsLikeTextView : TextView
     private lateinit var descriptionTextView : TextView
     private lateinit var recyclerView : RecyclerView
-    private lateinit var todayRecyclerAdapter: TodayRecyclerAdapter
+    private lateinit var allDayRecyclerAdapter: AllDayRecyclerAdapter
+    private lateinit var constraintLayout: ConstraintLayout
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -50,7 +55,6 @@ class TomorrowFragment : Fragment() {
             getWeather(it.lat.toString(),it.long.toString())
         }
 
-
     }
 
     private fun initViews(){
@@ -60,14 +64,16 @@ class TomorrowFragment : Fragment() {
         feelsLikeTextView = myView.findViewById(R.id.tomorrow_feels_like)
         descriptionTextView = myView.findViewById(R.id.tomorrow_weather_description)
         recyclerView  = myView.findViewById(R.id.tomorrow_RecyclerView_weather_for24H)
+        constraintLayout = myView.findViewById(R.id.tomorrow_frameLayout)
 
-        todayRecyclerAdapter = TodayRecyclerAdapter(myView.context)
+
+        allDayRecyclerAdapter = AllDayRecyclerAdapter(myView.context)
 
         val linearLayoutManager = LinearLayoutManager(myView.context)
         linearLayoutManager.orientation = RecyclerView.HORIZONTAL
 
         recyclerView.layoutManager = linearLayoutManager
-        recyclerView.adapter = todayRecyclerAdapter
+        recyclerView.adapter = allDayRecyclerAdapter
 
     }
 
@@ -95,9 +101,43 @@ class TomorrowFragment : Fragment() {
             )
             .into(weatherIcon)
 
+        constraintLayout.background = getDrawable(baseWeather.daily[1].weather[0].main)
 
-        todayRecyclerAdapter.setHourlyTempList(baseWeather.hourly,24)
-        todayRecyclerAdapter.notifyDataSetChanged()
+        allDayRecyclerAdapter.setHourlyTempList(baseWeather.hourly,24)
+        allDayRecyclerAdapter.notifyDataSetChanged()
     }
+
+
+    private fun getDrawable(description: String): Drawable {
+        val calendar = Calendar.getInstance()
+        var drawable = ContextCompat.getDrawable(myView.context, R.drawable.day_sunny_clear)
+
+        if (calendar.get(Calendar.HOUR_OF_DAY) in 6..19) {
+            when (description) {
+                "Clear" -> drawable =
+                    ContextCompat.getDrawable(myView.context, R.drawable.day_clear)
+                "Clouds" -> drawable =
+                    ContextCompat.getDrawable(myView.context, R.drawable.day_cloudy)
+                "Thunderstorm" -> drawable =
+                    ContextCompat.getDrawable(myView.context, R.drawable.day_sping)
+                "Rain" -> drawable = ContextCompat.getDrawable(myView.context, R.drawable.day_rain)
+                "Snow" -> drawable = ContextCompat.getDrawable(myView.context, R.drawable.snow)
+            }
+        } else {
+            when (description) {
+                "Clear" -> drawable =
+                    ContextCompat.getDrawable(myView.context, R.drawable.night_clear)
+                "Clouds" -> drawable =
+                    ContextCompat.getDrawable(myView.context, R.drawable.night_cloudy)
+                "Thunderstorm" -> drawable =
+                    ContextCompat.getDrawable(myView.context, R.drawable.thunder)
+                "Rain" -> drawable =
+                    ContextCompat.getDrawable(myView.context, R.drawable.night_rain)
+                "Snow" -> drawable = ContextCompat.getDrawable(myView.context, R.drawable.snow)
+            }
+        }
+        return drawable!!
+    }
+
 
 }

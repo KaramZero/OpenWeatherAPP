@@ -4,20 +4,12 @@ import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.example.openweather.R
 import com.example.openweather.databinding.ActivityGoogleMapsBinding
 import com.example.openweather.model.Location
-import com.example.openweather.model.local_source.LocationsLocal
-import com.example.openweather.model.remote_source.WeatherRemote
-import com.example.openweather.model.repo.WeatherRepo
-import com.example.openweather.view_model.weather_view_model.WeatherViewModel
-import com.example.openweather.view_model.weather_view_model.factory.WeatherViewModelFactory
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener
@@ -40,6 +32,8 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        supportActionBar?.hide()
 
         binding = ActivityGoogleMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -73,12 +67,13 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback {
         // Add a marker in Sydney and move the camera
         val sydney = LatLng(-34.0, 151.0)
 
-        var marker = mMap.addMarker(
+        val marker = mMap.addMarker(
             MarkerOptions().position(sydney).draggable(true).title("Marker in Sydney")
         )
-        mMap.moveCamera(CameraUpdateFactory.zoomBy(15f))
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        mMap.moveCamera(CameraUpdateFactory.zoomTo(5f))
+
 
 
         mMap.setOnMapClickListener(object : GoogleMap.OnMapClickListener {
@@ -132,7 +127,8 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback {
                         location.city = addresses[0].locality
                     }
                 } catch (e: IOException) {
-                    e.printStackTrace()
+                    Log.i("TAG", "onMarkerDragEnd: geocoder IOException ")
+                    finish()
                 }
                 Log.i("TAG", "onMarkerDragEnd: ${marker.position}")
             }
