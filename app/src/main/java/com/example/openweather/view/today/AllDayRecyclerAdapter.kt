@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.openweather.R
-import com.example.openweather.model.weather_pojo.Hourly
+import com.example.openweather.model.pojo.weather_pojo.Hourly
 import java.util.*
 import kotlin.Int
 import kotlin.collections.ArrayList
@@ -47,7 +47,7 @@ class AllDayRecyclerAdapter(
         calendar.timeInMillis =hourlyTempList[index].dt.toLong()*1000
         val hour = calendar.get(Calendar.HOUR)
 
-        Log.i("TAG", "onBindViewHolder: ${calendar.time}  ,hours: $hour index: $index")
+      //  Log.i("TAG", "onBindViewHolder: ${calendar.time}  ,hours: $hour index: $index")
         holder.hour.text = hour.toString()
 
 

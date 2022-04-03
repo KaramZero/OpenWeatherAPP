@@ -3,6 +3,8 @@ package com.example.openweather.view.today
 import android.app.AlertDialog
 import android.app.Dialog
 import android.graphics.drawable.Drawable
+import android.location.Address
+import android.location.Geocoder
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,15 +16,18 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.openweather.R
-import com.example.openweather.model.weather_pojo.BaseWeather
+import com.example.openweather.model.pojo.Location
+import com.example.openweather.model.pojo.weather_pojo.BaseWeather
 import com.example.openweather.view.MainActivity
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class TodayFragment : Fragment() {
 
@@ -48,10 +53,20 @@ class TodayFragment : Fragment() {
     private lateinit var constraintLayout: ConstraintLayout
 
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         myView = view
         initViews()
+
+        MainActivity.weatherViewModel.lastWeather.observe(viewLifecycleOwner) {
+            Log.i("TAG", "onCreate: Weather is here ")
+            MainActivity.weatherViewModel.insertWeather(it)
+            setWeather(it)
+        }
+
+
+
 
         MainActivity.gpsViewModel.location.observe(viewLifecycleOwner) {
             Log.i("TAG", "gpsViewModel.location : observer ")
@@ -83,14 +98,14 @@ class TodayFragment : Fragment() {
     }
 
     private fun getWeather(lat: String, lon: String) {
-        MainActivity.weatherViewModel.getWeather(lat, lon).observe(viewLifecycleOwner) {
-            Log.i("TAG", "onCreate: Weather is here ")
-            setWeather(it)
-        }
+        MainActivity.weatherViewModel.getWeather(lat, lon)
     }
 
     private fun setWeather(baseWeather: BaseWeather) {
-        locationTextView.text = baseWeather.timezone
+
+        val geocoder = Geocoder(this.context, Locale.getDefault())
+        val addresses: List<Address>? = geocoder.getFromLocation(baseWeather.lat, baseWeather.lon, 1)
+        locationTextView.text = addresses!![0].locality
         tempTextView.text = (baseWeather.current.temp - 273.15).toInt().toString()
         feelsLikeTextView.text = (baseWeather.current.feels_like - 273.15).toInt().toString()
         descriptionTextView.text = baseWeather.current.weather[0].description
@@ -103,7 +118,7 @@ class TodayFragment : Fragment() {
 
         val iconUrl =
             "https://openweathermap.org/img/wn/${baseWeather.current.weather[0].icon}@2x.png"
-        Log.i("TAG", "setWeather: iconUrl   $iconUrl")
+       // Log.i("TAG", "setWeather: iconUrl   $iconUrl")
         Glide.with(myView.context).load(iconUrl)
             .apply(
                 RequestOptions()
@@ -152,22 +167,36 @@ class TodayFragment : Fragment() {
     }
 
 
-    class StartGameDialogFragment : DialogFragment() {
+    class StartGameDialogFragment(var locationsData : LiveData<List<Location>>) : DialogFragment() {
 
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
             return activity?.let {
                 val builder = AlertDialog.Builder(it)
-                val myArray3 = arrayOf("Abu", "Praveen", "Sathya", "Yogesh", "Ram")
-                builder.setTitle("Pick Location")
+                var list = ArrayList<CharSequence>()
+                var locationsList = locationsData.value
+                if (locationsList != null) {
+                    for (location in locationsList){
+                        list.add(location.city)
+                        Log.i("TAG", "onCreateDialog: city to list  ${location.city} ")
+                    }
+                }
+                val myArray3 = list.toTypedArray()
+                    builder.setTitle("Pick Location")
                     .setItems(
                         myArray3
                     ) { dialog, which ->
                         // The 'which' argument contains the index position
                         // of the selected item
+                        var location = locationsList?.get(which)
+                        if (location != null) {
+                            Log.i("TAG", "onCreateDialog: calling location for ${location.city}")
+                            MainActivity.weatherViewModel.getWeather(location.lat.toString(), location.long.toString())
+                        }
                     }
                 builder.create()
             } ?: throw IllegalStateException("Activity cannot be null")
         }
     }
+
 
 }

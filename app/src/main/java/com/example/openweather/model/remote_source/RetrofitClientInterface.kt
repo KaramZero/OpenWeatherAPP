@@ -1,6 +1,6 @@
 package com.example.openweather.model.remote_source
 
-import com.example.openweather.model.weather_pojo.BaseWeather
+import com.example.openweather.model.pojo.weather_pojo.BaseWeather
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query

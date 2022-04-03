@@ -4,7 +4,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -13,7 +13,9 @@
         android:roundIcon="@drawable/sun"
         android:supportsRtl="true"
         android:theme="@style/Theme.OpenWeather">
-
+        <activity
+            android:name=".view.Settings"
+            android:exported="false" />
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 

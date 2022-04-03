@@ -1,4 +1,4 @@
-package com.example.openweather.model
+package com.example.openweather.model.pojo
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

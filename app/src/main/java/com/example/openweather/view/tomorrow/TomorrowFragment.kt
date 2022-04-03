@@ -1,6 +1,8 @@
 package com.example.openweather.view.tomorrow
 
 import android.graphics.drawable.Drawable
+import android.location.Address
+import android.location.Geocoder
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -16,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.openweather.R
-import com.example.openweather.model.weather_pojo.BaseWeather
+import com.example.openweather.model.pojo.weather_pojo.BaseWeather
 import com.example.openweather.view.MainActivity
 import com.example.openweather.view.today.AllDayRecyclerAdapter
 import java.util.*
@@ -50,9 +52,8 @@ class TomorrowFragment : Fragment() {
         myView = view
         initViews()
 
-        MainActivity.gpsViewModel.location.observe(viewLifecycleOwner){
-            Log.i("TAG", "gpsViewModel.location : observer ")
-            getWeather(it.lat.toString(),it.long.toString())
+        MainActivity.weatherViewModel.lastWeather.observe(viewLifecycleOwner) {
+            setWeather(it)
         }
 
     }
@@ -77,22 +78,17 @@ class TomorrowFragment : Fragment() {
 
     }
 
-    private fun getWeather(lat : String, lon : String){
-        MainActivity.weatherViewModel.getWeather(lat,lon).observe(viewLifecycleOwner){
-            Log.i("TAG", "onCreate: Weather is here ")
-            setWeather(it)
-        }
-    }
-
     private fun setWeather(baseWeather: BaseWeather){
-        locationTextView.text = baseWeather.timezone
+        val geocoder = Geocoder(this.context, Locale.getDefault())
+        val addresses: List<Address>? = geocoder.getFromLocation(baseWeather.lat, baseWeather.lon, 1)
+        locationTextView.text = addresses!![0].locality
         tempTextView.text = (baseWeather.daily[1].temp.day - 273.15).toInt().toString()
         feelsLikeTextView.text = (baseWeather.daily[1].feels_like.day - 273.15).toInt().toString()
         descriptionTextView.text = baseWeather.daily[1].weather[0].description
 
         var iconUrl =
             "https://openweathermap.org/img/wn/${baseWeather.daily[1].weather[0].icon}@2x.png"
-        Log.i("TAG", "setWeather: iconUrl   $iconUrl")
+      //  Log.i("TAG", "setWeather: iconUrl   $iconUrl")
         Glide.with(myView.context).load(iconUrl)
             .apply(
                 RequestOptions()
@@ -138,6 +134,5 @@ class TomorrowFragment : Fragment() {
         }
         return drawable!!
     }
-
 
 }

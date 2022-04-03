@@ -3,8 +3,9 @@ package com.example.openweather.model.repo
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
+import com.example.openweather.model.pojo.LastKnownWeather
 import com.example.openweather.model.remote_source.RemoteSource
-import com.example.openweather.model.weather_pojo.BaseWeather
+import com.example.openweather.model.pojo.weather_pojo.BaseWeather
 
 class WeatherRepo private constructor(
     var context: Context,
@@ -28,6 +29,7 @@ class WeatherRepo private constructor(
         Log.i("TAG", "getWeather: WeatherRepo ")
         return remoteSource.enqueueCall(lat , lon)
     }
+
 
 
 }

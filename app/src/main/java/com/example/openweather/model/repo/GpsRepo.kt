@@ -9,7 +9,7 @@ import android.os.Looper
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.MutableLiveData
-import com.example.openweather.model.Location
+import com.example.openweather.model.pojo.Location
 import com.google.android.gms.location.*
 import java.io.IOException
 import java.util.*

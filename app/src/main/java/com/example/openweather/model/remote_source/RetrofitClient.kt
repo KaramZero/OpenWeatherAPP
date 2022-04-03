@@ -3,7 +3,7 @@ package com.example.openweather.model.remote_source
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.openweather.model.weather_pojo.BaseWeather
+import com.example.openweather.model.pojo.weather_pojo.BaseWeather
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

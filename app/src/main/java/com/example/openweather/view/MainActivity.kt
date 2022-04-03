@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
@@ -13,10 +14,13 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.drawerlayout.widget.DrawerLayout.DrawerListener
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
 import com.example.openweather.databinding.ActivityMainBinding
 import com.example.openweather.model.local_source.LocationsLocal
+import com.example.openweather.model.pojo.Location
 import com.example.openweather.model.remote_source.WeatherRemote
 import com.example.openweather.model.repo.GpsRepo
 import com.example.openweather.model.repo.WeatherRepo
@@ -38,10 +42,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var fab: FloatingActionButton
     private lateinit var drawerMenuFab: FloatingActionButton
     private lateinit var drawerLayout: DrawerLayout
+    private lateinit var locationsData : LiveData<List<Location>>
+
 
     companion object{
         lateinit var gpsViewModel : GpsViewModel
         lateinit var weatherViewModel : WeatherViewModel
+        lateinit var lifecycleOwner: LifecycleOwner
     }
 
 
@@ -56,6 +63,7 @@ class MainActivity : AppCompatActivity() {
         initFloatingButtons()
 
         initDrawer()
+        lifecycleOwner = this
         val fusedLocationProviderClient:FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
         val gpsViewModelFactory = GpsViewModelFactory(GpsRepo.getGpsRepo(this,fusedLocationProviderClient))
@@ -69,9 +77,12 @@ class MainActivity : AppCompatActivity() {
 
         weatherViewModel = ViewModelProvider(this,weatherViewModelFactory)[WeatherViewModel::class.java]
 
+        weatherViewModel.getLastWeather()
 
-
-
+        locationsData = weatherViewModel.getAllStoredLocations()
+        locationsData.observe(this){
+            Log.i("TAG", "onCreate: locationsData size ${it.size} ")
+        }
 
 
     }
@@ -150,7 +161,7 @@ class MainActivity : AppCompatActivity() {
     }
 
      fun clickOnMe(item: MenuItem) {
-        val newFragment = TodayFragment.StartGameDialogFragment()
+        val newFragment = TodayFragment.StartGameDialogFragment(locationsData)
         newFragment.show(supportFragmentManager, "Locations")
         Toast.makeText(this,"Hi", Toast.LENGTH_SHORT).show()
         drawerLayout.close()

@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.openweather.R
 import com.example.openweather.databinding.ActivityGoogleMapsBinding
-import com.example.openweather.model.Location
+import com.example.openweather.model.pojo.Location
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener

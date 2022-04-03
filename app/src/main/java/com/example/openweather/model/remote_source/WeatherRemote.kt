@@ -1,7 +1,7 @@
 package com.example.openweather.model.remote_source
 
 import androidx.lifecycle.LiveData
-import com.example.openweather.model.weather_pojo.BaseWeather
+import com.example.openweather.model.pojo.weather_pojo.BaseWeather
 
 class WeatherRemote private constructor() : RemoteSource {
     override fun enqueueCall(lat : String , lon : String): LiveData<BaseWeather> {

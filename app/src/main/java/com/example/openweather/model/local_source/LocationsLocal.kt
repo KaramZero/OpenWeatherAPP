@@ -2,9 +2,9 @@ package com.example.openweather.model.local_source
 
 import android.content.Context
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
-import com.example.openweather.model.Location
+import com.example.openweather.model.pojo.LastKnownWeather
+import com.example.openweather.model.pojo.Location
 
 class LocationsLocal private constructor(context: Context) : LocalSource {
     private var locationDao: LocationDao
@@ -13,7 +13,7 @@ class LocationsLocal private constructor(context: Context) : LocalSource {
 
     companion object {
         private var locationsLocal: LocationsLocal? = null
-        private  var context: Context? = null
+        private var context: Context? = null
 
         fun getInstance(context: Context): LocationsLocal {
             this.context = context
@@ -46,5 +46,14 @@ class LocationsLocal private constructor(context: Context) : LocalSource {
 
     override fun getAllStoredLocations(): LiveData<List<Location>> {
         return storedLocations
+    }
+
+    override fun getLastWeather(): LastKnownWeather {
+        return locationDao.getLastWeather()
+    }
+
+    override fun insertWeather(lastKnownWeather: LastKnownWeather) {
+        locationDao.deleteWeather()
+        locationDao.insertWeather(lastKnownWeather)
     }
 }
