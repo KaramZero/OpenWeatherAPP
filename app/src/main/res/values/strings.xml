@@ -23,4 +23,14 @@
     <string name="feels_like">feels like</string>
 
     <string name="title_activity_google_maps">GoogleMapsActivity</string>
+    <string name="tempUnit">temperature units</string>
+    <string name="speedUnit">Speed Units</string>
+    <string name="language">language</string>
+    <string name="Kelvin">Kelvin</string>
+    <string name="Celsius">Celsius</string>
+    <string name="Fahrenheit">Fahrenheit</string>
+    <string name="Arabic">Arabic</string>
+    <string name="English">English</string>
+    <string name="meter_sec">meter/sec</string>
+    <string name="miles_hour">miles/hour</string>
 </resources>
