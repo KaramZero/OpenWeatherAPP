@@ -7,7 +7,7 @@ import retrofit2.http.Query
 
 interface RetrofitClientInterface {
     @GET("onecall?appid=6f56af69aa243b830ba54b2ac9f5195d")
-    fun getWeather(@Query("lat") lat:String, @Query("lon") lon:String): Call<BaseWeather>
+    fun getWeather(@Query("lat") lat:String, @Query("lon") lon:String, @Query("lang") lang:String): Call<BaseWeather>
 }
 
 //cce64fba5705becc7fbe52b46e9df003  3bdo

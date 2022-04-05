@@ -25,9 +25,9 @@ class WeatherRepo private constructor(
         }
     }
 
-    fun getWeather(lat : String , lon : String): LiveData<BaseWeather> {
+    fun getWeather(lat : String , lon : String,lang:String): LiveData<BaseWeather> {
         Log.i("TAG", "getWeather: WeatherRepo ")
-        return remoteSource.enqueueCall(lat , lon)
+        return remoteSource.enqueueCall(lat , lon,lang)
     }
 
 

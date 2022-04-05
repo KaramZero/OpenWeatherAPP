@@ -21,10 +21,10 @@ class WeatherViewModel(var weatherRepo: WeatherRepo,var localSource: LocalSource
     private var _lastWeather = MutableLiveData<BaseWeather>()
     var lastWeather = _lastWeather
 
-    fun getWeather(lat : String, lon : String){
+    fun getWeather(lat : String, lon : String,lang :String){
         var baseWeather = MutableLiveData<BaseWeather>()
         viewModelScope.launch {
-             baseWeather = weatherRepo.getWeather(lat,lon) as MutableLiveData<BaseWeather>
+             baseWeather = weatherRepo.getWeather(lat,lon,lang) as MutableLiveData<BaseWeather>
         }
         baseWeather.observe(MainActivity.lifecycleOwner){
             Log.i("TAG", "getWeather: WeatherViewModel ")
@@ -60,11 +60,12 @@ class WeatherViewModel(var weatherRepo: WeatherRepo,var localSource: LocalSource
     fun getLastWeather(){
         viewModelScope.launch {
             withContext(Dispatchers.IO){
-                var lastKnownWeather = localSource.getLastWeather()
+                val lastKnownWeather = localSource.getLastWeather()
+                if(lastKnownWeather != null){
                 Log.i("TAG", "getLastWeather: Done $lastKnownWeather")
                 val gson = Gson()
                 val weather:BaseWeather = gson.fromJson(lastKnownWeather.data,BaseWeather::class.java)
-                _lastWeather.postValue(weather)
+                _lastWeather.postValue(weather)}
             }
         }
     }

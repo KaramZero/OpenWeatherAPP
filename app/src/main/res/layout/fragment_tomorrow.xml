@@ -108,10 +108,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="153dp"
-        android:layout_marginTop="335dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="33dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tomorrow_weather_description">
@@ -119,13 +120,105 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            >
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/tomorrow_RecyclerView_weather_for24H"
-                android:layout_marginTop="150dp"
+                android:layout_marginTop="750dp"
                 android:layout_width="match_parent"
                 android:layout_height="100dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginTop="33dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginBottom="100dp"
+                android:background="@android:color/holo_purple">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".5"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/humidity"
+                        />
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/pressure"
+                        />
+
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/tomorrow_humidity"
+                        android:gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"/>
+
+                    <TextView
+                        android:id="@+id/tomorrow_pressure"
+                        android:gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"/>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/tomorrow_wind"
+                        android:gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"/>
+
+                    <TextView
+                        android:id="@+id/tomorrow_cloud"
+                        android:layout_width="wrap_content"
+                        android:gravity="center"
+                        android:layout_height="50dp"/>
+
+
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="end"
+                    android:layout_weight=".5">
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/wind"
+                        />
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/cloud"
+                        />
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
 
         </LinearLayout>
 

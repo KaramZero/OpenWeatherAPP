@@ -48,6 +48,11 @@ class TodayFragment : Fragment() {
     private lateinit var tempTextView: TextView
     private lateinit var feelsLikeTextView: TextView
     private lateinit var descriptionTextView: TextView
+    private lateinit var unitTextView: TextView
+    private lateinit var humidityTextView: TextView
+    private lateinit var cloudTextView: TextView
+    private lateinit var pressureTextView: TextView
+    private lateinit var windTextView: TextView
     private lateinit var recyclerView: RecyclerView
     private lateinit var allDayRecyclerAdapter: AllDayRecyclerAdapter
     private lateinit var constraintLayout: ConstraintLayout
@@ -66,14 +71,6 @@ class TodayFragment : Fragment() {
         }
 
 
-
-
-        MainActivity.gpsViewModel.location.observe(viewLifecycleOwner) {
-            Log.i("TAG", "gpsViewModel.location : observer ")
-            getWeather(it.lat.toString(), it.long.toString())
-        }
-
-
     }
 
     private fun initViews() {
@@ -83,6 +80,11 @@ class TodayFragment : Fragment() {
         tempTextView = myView.findViewById(R.id.temp)
         feelsLikeTextView = myView.findViewById(R.id.feels_like)
         descriptionTextView = myView.findViewById(R.id.weather_description)
+        unitTextView = myView.findViewById(R.id.unit)
+        humidityTextView = myView.findViewById(R.id.humidity)
+        cloudTextView = myView.findViewById(R.id.cloud)
+        pressureTextView = myView.findViewById(R.id.pressure)
+        windTextView = myView.findViewById(R.id.wind)
         recyclerView = myView.findViewById(R.id.RecyclerView_weather_for24H)
         constraintLayout = myView.findViewById(R.id.today_frameLayout)
 
@@ -97,18 +99,41 @@ class TodayFragment : Fragment() {
 
     }
 
-    private fun getWeather(lat: String, lon: String) {
-        MainActivity.weatherViewModel.getWeather(lat, lon)
-    }
 
     private fun setWeather(baseWeather: BaseWeather) {
 
         val geocoder = Geocoder(this.context, Locale.getDefault())
         val addresses: List<Address>? = geocoder.getFromLocation(baseWeather.lat, baseWeather.lon, 1)
         locationTextView.text = addresses!![0].locality
-        tempTextView.text = (baseWeather.current.temp - 273.15).toInt().toString()
-        feelsLikeTextView.text = (baseWeather.current.feels_like - 273.15).toInt().toString()
+
         descriptionTextView.text = baseWeather.current.weather[0].description
+        humidityTextView.text = baseWeather.current.humidity.toString()
+        pressureTextView.text = baseWeather.current.pressure.toString()
+        cloudTextView.text = baseWeather.current.clouds.toString()
+
+        when(MainActivity.speedUnit){
+            "meterSec" -> windTextView.text = baseWeather.current.wind_speed.toString()
+            "milesHour" -> windTextView.text = (baseWeather.current.wind_speed*2.237).toString()
+        }
+
+        when(MainActivity.tempUnit){
+            "celsius" -> {
+                tempTextView.text = (baseWeather.current.temp - 273.15).toInt().toString()
+                feelsLikeTextView.text = (baseWeather.current.feels_like - 273.15).toInt().toString()
+                unitTextView.text = "c"
+            }
+            "fahrenheit" -> {
+                tempTextView.text = ((baseWeather.current.temp - 273.15)*9/5+32).toInt().toString()
+                feelsLikeTextView.text = ((baseWeather.current.feels_like- 273.15)*9/5+32).toInt().toString()
+                unitTextView.text = "f"
+            }
+            "kelvin" -> {
+                tempTextView.text = (baseWeather.current.temp).toInt().toString()
+                feelsLikeTextView.text = (baseWeather.current.feels_like).toInt().toString()
+                unitTextView.text = "k"
+            }
+        }
+
 
         val calendar = Calendar.getInstance()
 
@@ -128,15 +153,18 @@ class TodayFragment : Fragment() {
             .into(weatherIcon)
 
 
-        constraintLayout.background = getDrawable(baseWeather.current.weather[0].main)
+        constraintLayout.background = getDrawable(baseWeather)
 
         allDayRecyclerAdapter.setHourlyTempList(baseWeather.hourly)
         allDayRecyclerAdapter.notifyDataSetChanged()
     }
 
 
-    private fun getDrawable(description: String): Drawable {
+    private fun getDrawable(baseWeather: BaseWeather): Drawable {
+        var description: String =baseWeather.current.weather[0].main
+
         val calendar = Calendar.getInstance()
+        calendar.timeInMillis = baseWeather.current.dt.toLong()*1000
         var drawable = ContextCompat.getDrawable(myView.context, R.drawable.day_sunny_clear)
 
         if (calendar.get(Calendar.HOUR_OF_DAY) in 6..19) {
@@ -166,37 +194,6 @@ class TodayFragment : Fragment() {
         return drawable!!
     }
 
-
-    class StartGameDialogFragment(var locationsData : LiveData<List<Location>>) : DialogFragment() {
-
-        override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-            return activity?.let {
-                val builder = AlertDialog.Builder(it)
-                var list = ArrayList<CharSequence>()
-                var locationsList = locationsData.value
-                if (locationsList != null) {
-                    for (location in locationsList){
-                        list.add(location.city)
-                        Log.i("TAG", "onCreateDialog: city to list  ${location.city} ")
-                    }
-                }
-                val myArray3 = list.toTypedArray()
-                    builder.setTitle("Pick Location")
-                    .setItems(
-                        myArray3
-                    ) { dialog, which ->
-                        // The 'which' argument contains the index position
-                        // of the selected item
-                        var location = locationsList?.get(which)
-                        if (location != null) {
-                            Log.i("TAG", "onCreateDialog: calling location for ${location.city}")
-                            MainActivity.weatherViewModel.getWeather(location.lat.toString(), location.long.toString())
-                        }
-                    }
-                builder.create()
-            } ?: throw IllegalStateException("Activity cannot be null")
-        }
-    }
 
 
 }

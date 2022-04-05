@@ -3,7 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/ITI/OpenWeather/app/src/main/res/drawable/cloud.xml" value="0.118" />
+        <entry key="..\:/ITI/OpenWeather/app/src/main/res/drawable/humidity.xml" value="0.1225" />
         <entry key="..\:/ITI/OpenWeather/app/src/main/res/drawable/ic_menu_camera.xml" value="0.1075" />
+        <entry key="..\:/ITI/OpenWeather/app/src/main/res/drawable/pressure.xml" value="0.1225" />
+        <entry key="..\:/ITI/OpenWeather/app/src/main/res/drawable/uv_rays.xml" value="0.1225" />
+        <entry key="..\:/ITI/OpenWeather/app/src/main/res/drawable/visibility.xml" value="0.1225" />
+        <entry key="..\:/ITI/OpenWeather/app/src/main/res/drawable/wind.xml" value="0.1225" />
         <entry key="..\:/ITI/OpenWeather/app/src/main/res/layout/activity_google_maps.xml" value="0.10989583333333333" />
         <entry key="..\:/ITI/OpenWeather/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/ITI/OpenWeather/app/src/main/res/layout/activity_settings.xml" value="0.264" />

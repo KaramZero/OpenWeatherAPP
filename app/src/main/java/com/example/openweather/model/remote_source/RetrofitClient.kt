@@ -19,14 +19,14 @@ class RetrofitClient private constructor() {
 
     var baseWeather = MutableLiveData<BaseWeather>()
 
-    fun makeRequest(lat : String , lon : String): LiveData<BaseWeather> {
+    fun makeRequest(lat : String , lon : String,lang :String): LiveData<BaseWeather> {
         val retrofitClientInterface: RetrofitClientInterface = retrofit.create(
             RetrofitClientInterface::class.java
         )
 
         Log.i("TAG", "makeRequest: ")
 
-        retrofitClientInterface.getWeather(lat,lon).enqueue(object : Callback<BaseWeather> {
+        retrofitClientInterface.getWeather(lat,lon,lang).enqueue(object : Callback<BaseWeather> {
             override fun onResponse(
                 call: Call<BaseWeather>,
                 response: Response<BaseWeather>

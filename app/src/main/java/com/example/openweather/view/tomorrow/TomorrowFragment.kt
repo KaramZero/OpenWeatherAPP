@@ -42,6 +42,11 @@ class TomorrowFragment : Fragment() {
     private lateinit var tempTextView : TextView
     private lateinit var feelsLikeTextView : TextView
     private lateinit var descriptionTextView : TextView
+    private lateinit var unitTextView: TextView
+    private lateinit var humidityTextView: TextView
+    private lateinit var cloudTextView: TextView
+    private lateinit var pressureTextView: TextView
+    private lateinit var windTextView: TextView
     private lateinit var recyclerView : RecyclerView
     private lateinit var allDayRecyclerAdapter: AllDayRecyclerAdapter
     private lateinit var constraintLayout: ConstraintLayout
@@ -64,6 +69,11 @@ class TomorrowFragment : Fragment() {
         tempTextView = myView.findViewById(R.id.tomorrow_temp)
         feelsLikeTextView = myView.findViewById(R.id.tomorrow_feels_like)
         descriptionTextView = myView.findViewById(R.id.tomorrow_weather_description)
+        unitTextView = myView.findViewById(R.id.tomorrow_unit)
+        humidityTextView = myView.findViewById(R.id.tomorrow_humidity)
+        cloudTextView = myView.findViewById(R.id.tomorrow_cloud)
+        pressureTextView = myView.findViewById(R.id.tomorrow_pressure)
+        windTextView = myView.findViewById(R.id.tomorrow_wind)
         recyclerView  = myView.findViewById(R.id.tomorrow_RecyclerView_weather_for24H)
         constraintLayout = myView.findViewById(R.id.tomorrow_frameLayout)
 
@@ -82,13 +92,39 @@ class TomorrowFragment : Fragment() {
         val geocoder = Geocoder(this.context, Locale.getDefault())
         val addresses: List<Address>? = geocoder.getFromLocation(baseWeather.lat, baseWeather.lon, 1)
         locationTextView.text = addresses!![0].locality
-        tempTextView.text = (baseWeather.daily[1].temp.day - 273.15).toInt().toString()
-        feelsLikeTextView.text = (baseWeather.daily[1].feels_like.day - 273.15).toInt().toString()
+
         descriptionTextView.text = baseWeather.daily[1].weather[0].description
+        humidityTextView.text = baseWeather.daily[1].humidity.toString()
+        pressureTextView.text = baseWeather.daily[1].pressure.toString()
+        cloudTextView.text = baseWeather.daily[1].clouds.toString()
+
+
+        when(MainActivity.speedUnit){
+            "meterSec" -> windTextView.text = baseWeather.daily[1].wind_speed.toString()
+            "milesHour" -> windTextView.text = (baseWeather.daily[1].wind_speed*2.237).toString()
+        }
+
+        when(MainActivity.tempUnit){
+            "celsius" -> {
+                tempTextView.text = (baseWeather.daily[1].temp.day - 273.15).toInt().toString()
+                feelsLikeTextView.text = (baseWeather.daily[1].feels_like.day - 273.15).toInt().toString()
+                unitTextView.text = "c"
+            }
+            "fahrenheit" -> {
+                tempTextView.text = ((baseWeather.daily[1].temp.day - 273.15)*9/5+32).toInt().toString()
+                feelsLikeTextView.text = ((baseWeather.daily[1].feels_like.day- 273.15)*9/5+32).toInt().toString()
+                unitTextView.text = "f"
+            }
+            "kelvin" -> {
+                tempTextView.text = (baseWeather.daily[1].temp.day).toInt().toString()
+                feelsLikeTextView.text = (baseWeather.daily[1].feels_like.day).toInt().toString()
+                unitTextView.text = "k"
+            }
+        }
 
         var iconUrl =
             "https://openweathermap.org/img/wn/${baseWeather.daily[1].weather[0].icon}@2x.png"
-      //  Log.i("TAG", "setWeather: iconUrl   $iconUrl")
+
         Glide.with(myView.context).load(iconUrl)
             .apply(
                 RequestOptions()

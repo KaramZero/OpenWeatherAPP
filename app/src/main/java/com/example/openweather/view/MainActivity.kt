@@ -1,9 +1,11 @@
 package com.example.openweather.view
 
 import android.Manifest
+import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -14,6 +16,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.drawerlayout.widget.DrawerLayout.DrawerListener
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
@@ -25,7 +28,6 @@ import com.example.openweather.model.remote_source.WeatherRemote
 import com.example.openweather.model.repo.GpsRepo
 import com.example.openweather.model.repo.WeatherRepo
 import com.example.openweather.view.main.SectionsPagerAdapter
-import com.example.openweather.view.today.TodayFragment
 import com.example.openweather.view_model.gps_view_model.GpsViewModel
 import com.example.openweather.view_model.gps_view_model.factory.GpsViewModelFactory
 import com.example.openweather.view_model.weather_view_model.WeatherViewModel
@@ -49,6 +51,18 @@ class MainActivity : AppCompatActivity() {
         lateinit var gpsViewModel : GpsViewModel
         lateinit var weatherViewModel : WeatherViewModel
         lateinit var lifecycleOwner: LifecycleOwner
+        lateinit var lang:String
+        lateinit var tempUnit:String
+        lateinit var speedUnit:String
+        private lateinit var settings: SharedPreferences
+
+        fun reload(settings: SharedPreferences){
+            tempUnit = settings.getString("tempUnit","celsius").toString()
+            speedUnit = settings.getString("speedUnit","meterSec").toString()
+            lang = settings.getString("language","en").toString()
+            gpsViewModel.getLocation()
+
+        }
     }
 
 
@@ -63,27 +77,40 @@ class MainActivity : AppCompatActivity() {
         initFloatingButtons()
 
         initDrawer()
+
+        initViewModels()
+
         lifecycleOwner = this
-        val fusedLocationProviderClient:FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
-        val gpsViewModelFactory = GpsViewModelFactory(GpsRepo.getGpsRepo(this,fusedLocationProviderClient))
+        settings = getSharedPreferences("Settings", MODE_PRIVATE)
 
-        gpsViewModel =ViewModelProvider(this,gpsViewModelFactory)[GpsViewModel::class.java]
+        reload(settings)
+
+        weatherViewModel.getLastWeather()
+
         gpsViewModel.getLocation()
+
+        locationsData = weatherViewModel.getAllStoredLocations()
+
+        locationsData.observe(this){
+
+        }
+        gpsViewModel.location.observe(this) {
+            weatherViewModel.getWeather(it.lat.toString(), it.lon.toString(),lang)
+        }
+
+    }
+
+    private fun initViewModels(){
+        val fusedLocationProviderClient:FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+        val gpsViewModelFactory = GpsViewModelFactory(GpsRepo.getGpsRepo(this,fusedLocationProviderClient))
+        gpsViewModel =ViewModelProvider(this,gpsViewModelFactory)[GpsViewModel::class.java]
 
 
         val weatherViewModelFactory = WeatherViewModelFactory(WeatherRemote.getInstance()
             ?.let { WeatherRepo.getInstance(this, it) }!!,LocationsLocal.getInstance(this))
 
         weatherViewModel = ViewModelProvider(this,weatherViewModelFactory)[WeatherViewModel::class.java]
-
-        weatherViewModel.getLastWeather()
-
-        locationsData = weatherViewModel.getAllStoredLocations()
-        locationsData.observe(this){
-            Log.i("TAG", "onCreate: locationsData size ${it.size} ")
-        }
-
 
     }
 
@@ -160,11 +187,49 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-     fun clickOnMe(item: MenuItem) {
-        val newFragment = TodayFragment.StartGameDialogFragment(locationsData)
+     fun onLocationsListClicked(item: MenuItem) {
+        val newFragment = StartGameDialogFragment(locationsData)
         newFragment.show(supportFragmentManager, "Locations")
-        Toast.makeText(this,"Hi", Toast.LENGTH_SHORT).show()
         drawerLayout.close()
+    }
+
+    fun onSettingsClicked(item: MenuItem) {
+
+        startActivity(Intent(this,Settings::class.java))
+        drawerLayout.close()
+    }
+
+
+    class StartGameDialogFragment(var locationsData : LiveData<List<Location>>) : DialogFragment() {
+
+        override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+            return activity?.let {
+                val builder = AlertDialog.Builder(it)
+                val list = ArrayList<CharSequence>()
+                val locationsList = locationsData.value
+                if (locationsList != null) {
+                    for (location in locationsList){
+                        list.add(location.city)
+                        Log.i("TAG", "onCreateDialog: city to list  ${location.city} ")
+                    }
+                }
+                val myArray3 = list.toTypedArray()
+                builder.setTitle("Pick Location")
+                    .setItems(
+                        myArray3
+                    ) { _, which ->
+                        // The 'which' argument contains the index position
+                        // of the selected item
+                        val location = locationsList?.get(which)
+                        if (location != null) {
+                            Log.i("TAG", "onCreateDialog: calling location for ${location.city}")
+                            weatherViewModel.getWeather(location.lat.toString(), location.lon.toString(),
+                                lang)
+                        }
+                    }
+                builder.create()
+            } ?: throw IllegalStateException("Activity cannot be null")
+        }
     }
 
 

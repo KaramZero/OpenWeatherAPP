@@ -9,21 +9,21 @@
             android:id="@+id/locations_menu"
             android:icon="@android:drawable/ic_dialog_map"
             android:title="@string/menu_locations"
-            android:onClick="clickOnMe"/>
+            android:onClick="onLocationsListClicked"/>
         <item
             android:id="@+id/weather_maps"
             android:icon="@drawable/ic_menu_gallery"
             android:title="@string/weather_maps"
-            android:onClick="clickOnMe"/>
+            android:onClick="onLocationsListClicked"/>
         <item
             android:id="@+id/settings"
             android:icon="@android:drawable/ic_menu_manage"
             android:title="@string/settings"
-            android:onClick="clickOnMe"/>
+            android:onClick="onSettingsClicked"/>
         <item
             android:id="@+id/about_us"
             android:icon="@android:drawable/ic_dialog_info"
             android:title="@string/about_us"
-            android:onClick="clickOnMe"/>
+            android:onClick="onLocationsListClicked"/>
     </group>
 </menu>

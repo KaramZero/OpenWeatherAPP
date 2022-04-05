@@ -91,7 +91,7 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback {
                         pickedLocationTextView.text = addresses[0].locality
                         marker.title = addresses[0].locality
                         location.lat = p0.latitude
-                        location.long = p0.longitude
+                        location.lon = p0.longitude
                         location.city = addresses[0].locality
                         marker.title = addresses[0].locality
                         Log.i("TAG", "getLocation: addOnCompleteListener ${addresses[0].locality}")
@@ -123,7 +123,7 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback {
                         pickedLocationTextView.text = addresses[0].locality
                         marker.title = addresses[0].locality
                         location.lat = marker.position.latitude
-                        location.long = marker.position.longitude
+                        location.lon = marker.position.longitude
                         location.city = addresses[0].locality
                     }
                 } catch (e: IOException) {
