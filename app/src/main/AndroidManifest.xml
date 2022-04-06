@@ -14,6 +14,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OpenWeather">
         <activity
+            android:name=".view.fav_locations.FavLocations"
+            android:exported="false"
+            android:label="@string/title_activity_fav_locations"
+            android:theme="@style/Theme.OpenWeather.NoActionBar" />
+        <activity
             android:name=".view.Settings"
             android:exported="false" />
         <!--

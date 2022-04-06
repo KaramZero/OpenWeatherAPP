@@ -8,7 +8,6 @@ import com.example.openweather.model.pojo.Location
 
 class LocationsLocal private constructor(context: Context) : LocalSource {
     private var locationDao: LocationDao
-    private var storedLocations: LiveData<List<Location>>
 
 
     companion object {
@@ -28,7 +27,6 @@ class LocationsLocal private constructor(context: Context) : LocalSource {
     init {
         val database: RoomDb = RoomDb.getInstance(context)!!
         locationDao = database.locationDao()!!
-        storedLocations = locationDao.getAllLocations()
     }
 
 
@@ -44,8 +42,8 @@ class LocationsLocal private constructor(context: Context) : LocalSource {
         Thread { locationDao.deleteLocation(location) }.start()
     }
 
-    override fun getAllStoredLocations(): LiveData<List<Location>> {
-        return storedLocations
+    override fun getAllStoredLocations(): List<Location> {
+        return locationDao.getAllLocations()
     }
 
     override fun getLastWeather(): LastKnownWeather {

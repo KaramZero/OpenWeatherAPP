@@ -21,6 +21,9 @@ class WeatherViewModel(var weatherRepo: WeatherRepo,var localSource: LocalSource
     private var _lastWeather = MutableLiveData<BaseWeather>()
     var lastWeather = _lastWeather
 
+    private var _storedLocations = MutableLiveData<List<Location>>()
+    var storedLocations :LiveData<List<Location>> = _storedLocations
+
     fun getWeather(lat : String, lon : String,lang :String){
         var baseWeather = MutableLiveData<BaseWeather>()
         viewModelScope.launch {
@@ -38,10 +41,14 @@ class WeatherViewModel(var weatherRepo: WeatherRepo,var localSource: LocalSource
     fun deleteLocation(location: Location){
         localSource.deleteLocation(location)
     }
-    fun getAllStoredLocations():LiveData<List<Location>>{
-        var list = localSource.getAllStoredLocations()
-        Log.i("TAG", "getAllStoredLocations: size ${list.value?.size}")
-        return list
+    fun getAllStoredLocations(){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                _storedLocations.postValue(localSource.getAllStoredLocations())
+                Log.i("TAG", "getAllStoredLocations: size ${_storedLocations.value?.size}")
+            }
+        }
+
     }
 
     fun insertWeather(weather: BaseWeather){

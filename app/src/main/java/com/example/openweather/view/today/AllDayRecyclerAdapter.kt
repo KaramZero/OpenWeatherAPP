@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.openweather.R
 import com.example.openweather.model.pojo.weather_pojo.Hourly
+import com.example.openweather.view.MainActivity
 import java.util.*
 import kotlin.Int
 import kotlin.collections.ArrayList
@@ -41,7 +42,17 @@ class AllDayRecyclerAdapter(
             )
             .into(holder.imageView)
 
-        holder.temp.text = (hourlyTempList[index].temp- 273.15).toInt().toString()
+        when(MainActivity.tempUnit){
+            "celsius" -> {
+                holder.temp.text = (hourlyTempList[index].temp- 273.15).toInt().toString()
+            }
+            "fahrenheit" -> {
+                holder.temp.text = ((hourlyTempList[index].temp - 273.15)*9/5+32).toInt().toString()
+            }
+            "kelvin" -> {
+                holder.temp.text = hourlyTempList[index].temp.toInt().toString()
+            }
+        }
 
         val calendar = Calendar.getInstance()
         calendar.timeInMillis =hourlyTempList[index].dt.toLong()*1000

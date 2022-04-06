@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".view.fav_locations.FavLocations"
+    tools:showIn="@layout/activity_fav_locations">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/useGPSButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/useGPS" />
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/RecyclerView_locations"
+            android:layout_width="match_parent"
+            android:layout_height="701dp" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

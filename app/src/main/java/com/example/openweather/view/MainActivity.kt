@@ -27,6 +27,7 @@ import com.example.openweather.model.pojo.Location
 import com.example.openweather.model.remote_source.WeatherRemote
 import com.example.openweather.model.repo.GpsRepo
 import com.example.openweather.model.repo.WeatherRepo
+import com.example.openweather.view.fav_locations.FavLocations
 import com.example.openweather.view.main.SectionsPagerAdapter
 import com.example.openweather.view_model.gps_view_model.GpsViewModel
 import com.example.openweather.view_model.gps_view_model.factory.GpsViewModelFactory
@@ -44,7 +45,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var fab: FloatingActionButton
     private lateinit var drawerMenuFab: FloatingActionButton
     private lateinit var drawerLayout: DrawerLayout
-    private lateinit var locationsData : LiveData<List<Location>>
 
 
     companion object{
@@ -55,13 +55,25 @@ class MainActivity : AppCompatActivity() {
         lateinit var tempUnit:String
         lateinit var speedUnit:String
         private lateinit var settings: SharedPreferences
+        private var gpsMode : Boolean = true
+        private lateinit var lat :String
+        private lateinit var lon :String
+        lateinit var locationsData : LiveData<List<Location>>
+
 
         fun reload(settings: SharedPreferences){
             tempUnit = settings.getString("tempUnit","celsius").toString()
             speedUnit = settings.getString("speedUnit","meterSec").toString()
             lang = settings.getString("language","en").toString()
-            gpsViewModel.getLocation()
+            gpsMode = settings.getBoolean("gpsMode",true)
+            lat = settings.getString("lat","-35").toString()
+            lon = settings.getString("lon","151").toString()
 
+            if (gpsMode) {
+                gpsViewModel.getLocation()
+            }else{
+                weatherViewModel.getWeather(lat,lon,lang)
+            }
         }
     }
 
@@ -84,13 +96,12 @@ class MainActivity : AppCompatActivity() {
 
         settings = getSharedPreferences("Settings", MODE_PRIVATE)
 
-        reload(settings)
-
         weatherViewModel.getLastWeather()
 
-        gpsViewModel.getLocation()
+        reload(settings)
 
-        locationsData = weatherViewModel.getAllStoredLocations()
+        locationsData = weatherViewModel.storedLocations
+        weatherViewModel.getAllStoredLocations()
 
         locationsData.observe(this){
 
@@ -188,9 +199,7 @@ class MainActivity : AppCompatActivity() {
     }
 
      fun onLocationsListClicked(item: MenuItem) {
-        val newFragment = StartGameDialogFragment(locationsData)
-        newFragment.show(supportFragmentManager, "Locations")
-        drawerLayout.close()
+        startActivity(Intent(this, FavLocations::class.java))
     }
 
     fun onSettingsClicked(item: MenuItem) {
@@ -199,38 +208,13 @@ class MainActivity : AppCompatActivity() {
         drawerLayout.close()
     }
 
-
-    class StartGameDialogFragment(var locationsData : LiveData<List<Location>>) : DialogFragment() {
-
-        override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-            return activity?.let {
-                val builder = AlertDialog.Builder(it)
-                val list = ArrayList<CharSequence>()
-                val locationsList = locationsData.value
-                if (locationsList != null) {
-                    for (location in locationsList){
-                        list.add(location.city)
-                        Log.i("TAG", "onCreateDialog: city to list  ${location.city} ")
-                    }
-                }
-                val myArray3 = list.toTypedArray()
-                builder.setTitle("Pick Location")
-                    .setItems(
-                        myArray3
-                    ) { _, which ->
-                        // The 'which' argument contains the index position
-                        // of the selected item
-                        val location = locationsList?.get(which)
-                        if (location != null) {
-                            Log.i("TAG", "onCreateDialog: calling location for ${location.city}")
-                            weatherViewModel.getWeather(location.lat.toString(), location.lon.toString(),
-                                lang)
-                        }
-                    }
-                builder.create()
-            } ?: throw IllegalStateException("Activity cannot be null")
-        }
+    fun onAboutUsClicked(item: MenuItem) {
+        Toast.makeText(this,"Coming Soon :)",Toast.LENGTH_SHORT)
     }
 
+
+    fun onWeatherMapClicked(item: MenuItem) {
+        Toast.makeText(this,"Coming Soon :)",Toast.LENGTH_SHORT)
+    }
 
 }
