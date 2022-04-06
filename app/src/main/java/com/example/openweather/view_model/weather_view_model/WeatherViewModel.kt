@@ -19,7 +19,7 @@ import kotlinx.coroutines.withContext
 class WeatherViewModel(var weatherRepo: WeatherRepo,var localSource: LocalSource) : ViewModel() {
 
     private var _lastWeather = MutableLiveData<BaseWeather>()
-    var lastWeather = _lastWeather
+    var lastWeather :LiveData<BaseWeather> = _lastWeather
 
     private var _storedLocations = MutableLiveData<List<Location>>()
     var storedLocations :LiveData<List<Location>> = _storedLocations

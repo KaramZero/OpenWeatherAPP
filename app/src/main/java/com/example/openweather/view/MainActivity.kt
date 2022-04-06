@@ -209,12 +209,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onAboutUsClicked(item: MenuItem) {
-        Toast.makeText(this,"Coming Soon :)",Toast.LENGTH_SHORT)
+        Toast.makeText(this,"Coming Soon :)",Toast.LENGTH_SHORT).show()
+        drawerLayout.close()
     }
 
 
     fun onWeatherMapClicked(item: MenuItem) {
-        Toast.makeText(this,"Coming Soon :)",Toast.LENGTH_SHORT)
+        Toast.makeText(this,"Coming Soon :)",Toast.LENGTH_SHORT).show()
+        drawerLayout.close()
     }
 
 }
