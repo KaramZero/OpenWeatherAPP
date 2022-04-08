@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">الطقص</string>
+    <string name="app_name">الطقس</string>
     <string name="tab_text_1">اليوم</string>
     <string name="tab_text_2">غدا</string>
     <string name="tab_text_3">سبعة ايام</string>
