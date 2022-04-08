@@ -145,7 +145,7 @@
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="30dp"
                 android:layout_marginBottom="100dp"
-                android:background="@android:color/holo_purple">
+                android:background="@drawable/back">
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -155,11 +155,13 @@
                     <ImageView
                         android:layout_width="50dp"
                         android:layout_height="50dp"
+                        android:layout_marginStart="10sp"
                         android:src="@drawable/humidity"
                         />
                     <ImageView
                         android:layout_width="50dp"
                         android:layout_height="50dp"
+                        android:layout_marginStart="10sp"
                         android:src="@drawable/pressure"
                         />
 
@@ -175,11 +177,13 @@
                         android:id="@+id/humidity"
                         android:gravity="center"
                         android:layout_width="wrap_content"
+                        android:layout_marginStart="10sp"
                         android:layout_height="50dp"/>
 
                     <TextView
                         android:id="@+id/pressure"
                         android:gravity="center"
+                        android:layout_marginStart="10sp"
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"/>
 
@@ -194,12 +198,14 @@
                         android:id="@+id/wind"
                         android:gravity="center"
                         android:layout_width="wrap_content"
+                        android:layout_marginEnd="10sp"
                         android:layout_height="50dp"/>
 
                     <TextView
                         android:id="@+id/cloud"
                         android:layout_width="wrap_content"
                         android:gravity="center"
+                        android:layout_marginEnd="10sp"
                         android:layout_height="50dp"/>
 
 
@@ -215,11 +221,13 @@
                     <ImageView
                         android:layout_width="50dp"
                         android:layout_height="50dp"
+                        android:layout_marginEnd="10sp"
                         android:src="@drawable/wind"
                         />
                     <ImageView
                         android:layout_width="50dp"
                         android:layout_height="50dp"
+                        android:layout_marginEnd="10sp"
                         android:src="@drawable/cloud"
                         />
 

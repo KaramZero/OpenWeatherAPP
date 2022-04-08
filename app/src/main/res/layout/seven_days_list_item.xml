@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/back"
+    android:layout_marginBottom="10sp">
         <ImageView
             android:id="@+id/Days_icon"
             android:layout_width="71dp"
@@ -21,7 +23,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="96dp"
-            android:textColor="@android:color/holo_red_dark"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -32,7 +33,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
             android:layout_marginEnd="96dp"
-            android:textColor="@android:color/holo_red_dark"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -42,8 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginTop="20dp"
-            android:textColor="@android:color/holo_red_dark"
-            android:textSize="25sp"
+            android:textSize="15sp"
             android:textStyle="bold"
 
             app:layout_constraintStart_toStartOf="parent"
@@ -56,7 +55,6 @@
             android:layout_marginStart="104dp"
             android:layout_marginTop="24dp"
             android:gravity="center"
-            android:textColor="@android:color/holo_red_dark"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"

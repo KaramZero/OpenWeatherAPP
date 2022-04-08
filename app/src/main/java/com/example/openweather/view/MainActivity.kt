@@ -1,11 +1,12 @@
 package com.example.openweather.view
 
 import android.Manifest
-import android.app.AlertDialog
-import android.app.Dialog
+import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.content.res.Configuration
+import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -16,7 +17,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.drawerlayout.widget.DrawerLayout.DrawerListener
-import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
@@ -37,6 +37,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -52,6 +53,7 @@ class MainActivity : AppCompatActivity() {
         lateinit var weatherViewModel : WeatherViewModel
         lateinit var lifecycleOwner: LifecycleOwner
         lateinit var lang:String
+        lateinit var _lang:String
         lateinit var tempUnit:String
         lateinit var speedUnit:String
         private lateinit var settings: SharedPreferences
@@ -69,6 +71,7 @@ class MainActivity : AppCompatActivity() {
             lat = settings.getString("lat","-35").toString()
             lon = settings.getString("lon","151").toString()
 
+
             if (gpsMode) {
                 gpsViewModel.getLocation()
             }else{
@@ -84,6 +87,18 @@ class MainActivity : AppCompatActivity() {
 
         checkPermissions()
 
+        settings = getSharedPreferences("Settings", MODE_PRIVATE)
+
+        lang = settings.getString("language","en").toString()
+        _lang = lang
+        if(Locale.getDefault().language != lang) {
+            val locale = Locale(lang)
+            Locale.setDefault(locale)
+            val resources: Resources = resources
+            val config: Configuration = resources.configuration
+            config.setLocale(locale)
+            resources.updateConfiguration(config, resources.displayMetrics)
+        }
         initViewPager()
 
         initFloatingButtons()
@@ -93,8 +108,6 @@ class MainActivity : AppCompatActivity() {
         initViewModels()
 
         lifecycleOwner = this
-
-        settings = getSharedPreferences("Settings", MODE_PRIVATE)
 
         weatherViewModel.getLastWeather()
 
@@ -111,6 +124,23 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
+    override fun onResume() {
+        super.onResume()
+        Log.i("TAG", "onResume: ${Locale.getDefault().language}  $lang")
+        if(_lang != lang) {
+            gpsViewModel.location.removeObservers(this)
+            val locale = Locale(lang)
+            Locale.setDefault(locale)
+            val resources: Resources = resources
+            val config: Configuration = resources.configuration
+            config.setLocale(locale)
+            resources.updateConfiguration(config, resources.displayMetrics)
+            finish()
+            startActivity(intent);
+        }
+    }
+
 
     private fun initViewModels(){
         val fusedLocationProviderClient:FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
@@ -200,6 +230,7 @@ class MainActivity : AppCompatActivity() {
 
      fun onLocationsListClicked(item: MenuItem) {
         startActivity(Intent(this, FavLocations::class.java))
+         drawerLayout.close()
     }
 
     fun onSettingsClicked(item: MenuItem) {

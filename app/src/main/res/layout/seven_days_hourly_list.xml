@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/back"
+    android:orientation="horizontal"
+    >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".5"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="10sp"
+                android:src="@drawable/humidity"
+                />
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="10sp"
+                android:src="@drawable/pressure"
+                />
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/seven_humidity"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="10sp"
+                android:layout_height="50dp"/>
+
+            <TextView
+                android:id="@+id/seven_pressure"
+                android:gravity="center"
+                android:layout_marginStart="10sp"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/seven_wind"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_marginEnd="10sp"
+                android:layout_height="50dp"/>
+
+            <TextView
+                android:id="@+id/seven_cloud"
+                android:layout_width="wrap_content"
+                android:gravity="center"
+                android:layout_marginEnd="10sp"
+                android:layout_height="50dp"/>
+
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="end"
+            android:layout_weight=".5">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="10sp"
+                android:src="@drawable/wind"
+                />
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="10sp"
+                android:src="@drawable/cloud"
+                />
+
+
+        </LinearLayout>
+
+
+
+
+
+</LinearLayout>

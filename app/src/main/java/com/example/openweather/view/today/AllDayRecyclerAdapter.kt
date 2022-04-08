@@ -12,6 +12,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.openweather.R
 import com.example.openweather.model.pojo.weather_pojo.Hourly
 import com.example.openweather.view.MainActivity
+import java.text.DecimalFormat
 import java.util.*
 import kotlin.Int
 import kotlin.collections.ArrayList
@@ -44,13 +45,13 @@ class AllDayRecyclerAdapter(
 
         when(MainActivity.tempUnit){
             "celsius" -> {
-                holder.temp.text = (hourlyTempList[index].temp- 273.15).toInt().toString()
+                holder.temp.text = DecimalFormat("#").format(hourlyTempList[index].temp- 273.15).toString()
             }
             "fahrenheit" -> {
-                holder.temp.text = ((hourlyTempList[index].temp - 273.15)*9/5+32).toInt().toString()
+                holder.temp.text = DecimalFormat("#").format((hourlyTempList[index].temp - 273.15)*9/5+32).toString()
             }
             "kelvin" -> {
-                holder.temp.text = hourlyTempList[index].temp.toInt().toString()
+                holder.temp.text = DecimalFormat("#").format(hourlyTempList[index].temp).toString()
             }
         }
 
@@ -59,7 +60,7 @@ class AllDayRecyclerAdapter(
         val hour = calendar.get(Calendar.HOUR)
 
       //  Log.i("TAG", "onBindViewHolder: ${calendar.time}  ,hours: $hour index: $index")
-        holder.hour.text = hour.toString()
+        holder.hour.text = DecimalFormat("#").format(hour).toString()
 
 
 

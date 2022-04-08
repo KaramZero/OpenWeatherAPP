@@ -21,6 +21,7 @@ import com.example.openweather.R
 import com.example.openweather.model.pojo.weather_pojo.BaseWeather
 import com.example.openweather.view.MainActivity
 import com.example.openweather.view.today.AllDayRecyclerAdapter
+import java.text.DecimalFormat
 import java.util.*
 
 
@@ -94,30 +95,30 @@ class TomorrowFragment : Fragment() {
         locationTextView.text = addresses!![0].locality
 
         descriptionTextView.text = baseWeather.daily[1].weather[0].description
-        humidityTextView.text = baseWeather.daily[1].humidity.toString()
-        pressureTextView.text = baseWeather.daily[1].pressure.toString()
-        cloudTextView.text = baseWeather.daily[1].clouds.toString()
+        humidityTextView.text = DecimalFormat("#").format(baseWeather.daily[1].humidity).toString()
+        pressureTextView.text = DecimalFormat("#").format(baseWeather.daily[1].pressure).toString()
+        cloudTextView.text = DecimalFormat("#").format(baseWeather.daily[1].clouds).toString()
 
 
         when(MainActivity.speedUnit){
-            "meterSec" -> windTextView.text = baseWeather.daily[1].wind_speed.toString()
-            "milesHour" -> windTextView.text = (baseWeather.daily[1].wind_speed*2.237).toString()
+            "meterSec" -> windTextView.text = DecimalFormat("#").format(baseWeather.daily[1].wind_speed).toString()
+            "milesHour" -> windTextView.text = DecimalFormat("#").format(baseWeather.daily[1].wind_speed*2.237).toString()
         }
 
         when(MainActivity.tempUnit){
             "celsius" -> {
-                tempTextView.text = (baseWeather.daily[1].temp.day - 273.15).toInt().toString()
+                tempTextView.text = DecimalFormat("#").format(baseWeather.daily[1].temp.day - 273.15).toString()
                 feelsLikeTextView.text = (baseWeather.daily[1].feels_like.day - 273.15).toInt().toString()
                 unitTextView.text = "c"
             }
             "fahrenheit" -> {
-                tempTextView.text = ((baseWeather.daily[1].temp.day - 273.15)*9/5+32).toInt().toString()
-                feelsLikeTextView.text = ((baseWeather.daily[1].feels_like.day- 273.15)*9/5+32).toInt().toString()
+                tempTextView.text = DecimalFormat("#").format((baseWeather.daily[1].temp.day - 273.15)*9/5+32).toString()
+                feelsLikeTextView.text = DecimalFormat("#").format((baseWeather.daily[1].feels_like.day- 273.15)*9/5+32).toString()
                 unitTextView.text = "f"
             }
             "kelvin" -> {
-                tempTextView.text = (baseWeather.daily[1].temp.day).toInt().toString()
-                feelsLikeTextView.text = (baseWeather.daily[1].feels_like.day).toInt().toString()
+                tempTextView.text = DecimalFormat("#").format(baseWeather.daily[1].temp.day).toString()
+                feelsLikeTextView.text = DecimalFormat("#").format(baseWeather.daily[1].feels_like.day).toString()
                 unitTextView.text = "k"
             }
         }

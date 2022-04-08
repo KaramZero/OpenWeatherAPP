@@ -14,12 +14,14 @@ import com.example.openweather.model.pojo.weather_pojo.BaseWeather
 import com.example.openweather.model.pojo.weather_pojo.Daily
 import com.example.openweather.model.pojo.weather_pojo.Hourly
 import com.example.openweather.view.MainActivity
+import java.text.DecimalFormat
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.Int
 import kotlin.collections.ArrayList
 
 class SevenDaysRecyclerAdapter(
-    private val context: Context
+    private val context: Context , var frag:SevenDaysFragment
 ) : RecyclerView.Adapter<SevenDaysRecyclerAdapter.ViewHolder>() {
 
     private var dailyWeather: List<Daily> = ArrayList()
@@ -43,21 +45,27 @@ class SevenDaysRecyclerAdapter(
             .into(holder.imageView)
 
         holder.description.text = dailyWeather[position].weather[0].description
-        holder.dayNumber.text = (position+1).toString()
+
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis  = (dailyWeather[position].dt*1000).toLong()
+
+        holder.dayNumber.text =
+            SimpleDateFormat("E", Locale.getDefault()).format(calendar.time)
+
         when(MainActivity.tempUnit){
             "celsius" -> {
-                holder.maxTemp.text = (dailyWeather[position].temp.max- 273.15).toInt().toString()
-                holder.minTemp.text = (dailyWeather[position].temp.min- 273.15).toInt().toString()
+                holder.maxTemp.text = DecimalFormat("#").format(dailyWeather[position].temp.max- 273.15).toString()
+                holder.minTemp.text = DecimalFormat("#").format(dailyWeather[position].temp.min- 273.15).toString()
 
             }
             "fahrenheit" -> {
-                holder.maxTemp.text = ((dailyWeather[position].temp.max - 273.15)*9/5+32).toInt().toString()
-                holder.minTemp.text = ((dailyWeather[position].temp.min - 273.15)*9/5+32).toInt().toString()
+                holder.maxTemp.text = DecimalFormat("#").format((dailyWeather[position].temp.max - 273.15)*9/5+32).toString()
+                holder.minTemp.text = DecimalFormat("#").format((dailyWeather[position].temp.min - 273.15)*9/5+32).toString()
 
             }
             "kelvin" -> {
-                holder.maxTemp.text = dailyWeather[position].temp.max.toInt().toString()
-                holder.minTemp.text = dailyWeather[position].temp.min.toInt().toString()
+                holder.maxTemp.text = DecimalFormat("#").format(dailyWeather[position].temp.max).toString()
+                holder.minTemp.text = DecimalFormat("#").format(dailyWeather[position].temp.min).toString()
             }
         }
 
@@ -73,12 +81,18 @@ class SevenDaysRecyclerAdapter(
     }
 
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+   inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var imageView: ImageView = itemView.findViewById(R.id.Days_icon)
         var maxTemp: TextView = itemView.findViewById(R.id.Days_max_temp)
         var minTemp: TextView = itemView.findViewById(R.id.Days_min_temp)
         var description:TextView = itemView.findViewById(R.id.Days_description)
         var dayNumber:TextView = itemView.findViewById(R.id.Day_number)
+
+        init {
+            itemView.setOnClickListener{
+                frag.showDialog(dailyWeather[adapterPosition])
+            }
+        }
 
     }
 

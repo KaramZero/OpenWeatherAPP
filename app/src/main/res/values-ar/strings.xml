@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">الطقص</string>
+    <string name="tab_text_1">اليوم</string>
+    <string name="tab_text_2">غدا</string>
+    <string name="tab_text_3">سبعة ايام</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">الطقس</string>
+    <string name="nav_header_subtitle">اهلا بك</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+
+    <string name="menu_locations">المواقع</string>
+    <string name="weather_maps">خريطة الطقس</string>
+    <string name="about_us">عن المطور</string>
+    <string name="settings">الضبط</string>
+
+    <string name="feels_like">تشعر كأنها</string>
+
+    <string name="title_activity_google_maps">GoogleMapsActivity</string>
+    <string name="tempUnit">وحدة درجه الحراره</string>
+    <string name="speedUnit">وحدة السرعه</string>
+    <string name="language">اللغة</string>
+    <string name="Kelvin">Kelvin</string>
+    <string name="Celsius">Celsius</string>
+    <string name="Fahrenheit">Fahrenheit</string>
+    <string name="Arabic">العربية</string>
+    <string name="English">الانجليزية</string>
+    <string name="meter_sec">متر/ثانية</string>
+    <string name="miles_hour">ميل/الساعه</string>
+    <string name="title_activity_fav_locations">FavLocations</string>
+    <string name="useGPS">الموقع الحالي</string>
+
+</resources>
