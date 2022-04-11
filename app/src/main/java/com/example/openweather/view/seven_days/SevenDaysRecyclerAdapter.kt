@@ -1,7 +1,6 @@
 package com.example.openweather.view.seven_days
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,11 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.openweather.R
-import com.example.openweather.model.pojo.weather_pojo.BaseWeather
 import com.example.openweather.model.pojo.weather_pojo.Daily
-import com.example.openweather.model.pojo.weather_pojo.Hourly
 import com.example.openweather.view.MainActivity
-import java.text.DecimalFormat
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.Int
@@ -50,22 +47,25 @@ class SevenDaysRecyclerAdapter(
         calendar.timeInMillis  = (dailyWeather[position].dt*1000).toLong()
 
         holder.dayNumber.text =
-            SimpleDateFormat("E", Locale.getDefault()).format(calendar.time)
+            SimpleDateFormat("E", Locale(MainActivity.lang)).format(calendar.time)
+
+        val numberFormat = NumberFormat.getInstance(Locale(MainActivity.lang))
+
 
         when(MainActivity.tempUnit){
             "celsius" -> {
-                holder.maxTemp.text = DecimalFormat("#").format(dailyWeather[position].temp.max- 273.15).toString()
-                holder.minTemp.text = DecimalFormat("#").format(dailyWeather[position].temp.min- 273.15).toString()
+                holder.maxTemp.text = numberFormat.format((dailyWeather[position].temp.max- 273.15).toInt()).toString()
+                holder.minTemp.text = numberFormat.format((dailyWeather[position].temp.min- 273.15).toInt()).toString()
 
             }
             "fahrenheit" -> {
-                holder.maxTemp.text = DecimalFormat("#").format((dailyWeather[position].temp.max - 273.15)*9/5+32).toString()
-                holder.minTemp.text = DecimalFormat("#").format((dailyWeather[position].temp.min - 273.15)*9/5+32).toString()
+                holder.maxTemp.text = numberFormat.format(((dailyWeather[position].temp.max - 273.15)*9/5+32).toInt()).toString()
+                holder.minTemp.text = numberFormat.format(((dailyWeather[position].temp.min - 273.15)*9/5+32).toInt()).toString()
 
             }
             "kelvin" -> {
-                holder.maxTemp.text = DecimalFormat("#").format(dailyWeather[position].temp.max).toString()
-                holder.minTemp.text = DecimalFormat("#").format(dailyWeather[position].temp.min).toString()
+                holder.maxTemp.text = numberFormat.format(dailyWeather[position].temp.max.toInt()).toString()
+                holder.minTemp.text = numberFormat.format(dailyWeather[position].temp.min.toInt()).toString()
             }
         }
 

@@ -23,7 +23,7 @@
 
     <string name="feels_like">تشعر كأنها</string>
 
-    <string name="title_activity_google_maps">GoogleMapsActivity</string>
+    <string name="title_activity_google_maps">خريطة جوجل</string>
     <string name="tempUnit">وحدة درجه الحراره</string>
     <string name="speedUnit">وحدة السرعه</string>
     <string name="language">اللغة</string>
@@ -34,7 +34,11 @@
     <string name="English">الانجليزية</string>
     <string name="meter_sec">متر/ثانية</string>
     <string name="miles_hour">ميل/الساعه</string>
-    <string name="title_activity_fav_locations">FavLocations</string>
+    <string name="title_activity_fav_locations">الاماكن المفضلة</string>
     <string name="useGPS">الموقع الحالي</string>
+    <string name="clearAllAlerts">حذف الكل</string>
+    <string name="DaysNumber">عدد الايام</string>
+    <string name="title_activity_alerts">المنبهات</string>
+
 
 </resources>

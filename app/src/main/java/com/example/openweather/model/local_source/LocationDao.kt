@@ -1,6 +1,5 @@
 package com.example.openweather.model.local_source
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert

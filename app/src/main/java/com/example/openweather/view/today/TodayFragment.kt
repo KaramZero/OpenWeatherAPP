@@ -1,7 +1,6 @@
 package com.example.openweather.view.today
 
-import android.app.AlertDialog
-import android.app.Dialog
+
 import android.graphics.drawable.Drawable
 import android.location.Address
 import android.location.Geocoder
@@ -14,21 +13,17 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.openweather.R
-import com.example.openweather.model.pojo.Location
 import com.example.openweather.model.pojo.weather_pojo.BaseWeather
 import com.example.openweather.view.MainActivity
-import java.text.DecimalFormat
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class TodayFragment : Fragment() {
 
@@ -103,43 +98,44 @@ class TodayFragment : Fragment() {
 
     private fun setWeather(baseWeather: BaseWeather) {
 
-        val geocoder = Geocoder(this.context, Locale.getDefault())
+        val geocoder = Geocoder(this.context, Locale(MainActivity.lang))
         val addresses: List<Address>? = geocoder.getFromLocation(baseWeather.lat, baseWeather.lon, 1)
         locationTextView.text = addresses!![0].locality
 
+        val numberFormat = NumberFormat.getInstance(Locale(MainActivity.lang))
         descriptionTextView.text = baseWeather.current.weather[0].description
-        humidityTextView.text = DecimalFormat("#").format(baseWeather.current.humidity).toString()
-        pressureTextView.text = DecimalFormat("#").format(baseWeather.current.pressure).toString()
-        cloudTextView.text = DecimalFormat("#").format(baseWeather.current.clouds).toString()
+        humidityTextView.text = numberFormat.format(baseWeather.current.humidity).toString()
+        pressureTextView.text = numberFormat.format(baseWeather.current.pressure).toString()
+        cloudTextView.text = numberFormat.format(baseWeather.current.clouds).toString()
 
         when(MainActivity.speedUnit){
-            "meterSec" -> windTextView.text = DecimalFormat("#").format(baseWeather.current.wind_speed).toString()
-            "milesHour" -> windTextView.text = DecimalFormat("#").format((baseWeather.current.wind_speed*2.237)).toString()
+            "meterSec" -> windTextView.text = numberFormat.format(baseWeather.current.wind_speed.toInt()).toString()
+            "milesHour" -> windTextView.text = numberFormat.format((baseWeather.current.wind_speed*2.237).toInt()).toString()
         }
 
         when(MainActivity.tempUnit){
             "celsius" -> {
-                tempTextView.text = DecimalFormat("#").format(baseWeather.current.temp - 273.15).toString()
-                feelsLikeTextView.text = DecimalFormat("#").format(baseWeather.current.feels_like - 273.15).toString()
+                tempTextView.text = numberFormat.format((baseWeather.current.temp - 273.15).toInt()).toString()
+                feelsLikeTextView.text = numberFormat.format((baseWeather.current.feels_like - 273.15).toInt()).toString()
                 unitTextView.text = "c"
             }
             "fahrenheit" -> {
-                tempTextView.text = DecimalFormat("#").format((baseWeather.current.temp - 273.15)*9/5+32).toString()
-                feelsLikeTextView.text = DecimalFormat("#").format((baseWeather.current.feels_like- 273.15)*9/5+32).toString()
+                tempTextView.text = numberFormat.format(((baseWeather.current.temp - 273.15)*9/5+32).toInt()).toString()
+                feelsLikeTextView.text = numberFormat.format(((baseWeather.current.feels_like- 273.15)*9/5+32).toInt()).toString()
                 unitTextView.text = "f"
             }
             "kelvin" -> {
-                tempTextView.text = DecimalFormat("#").format(baseWeather.current.temp).toString()
-                feelsLikeTextView.text = DecimalFormat("#").format(baseWeather.current.feels_like).toString()
+                tempTextView.text = numberFormat.format(baseWeather.current.temp.toInt()).toString()
+                feelsLikeTextView.text = numberFormat.format(baseWeather.current.feels_like.toInt()).toString()
                 unitTextView.text = "k"
             }
         }
 
 
-        val calendar = Calendar.getInstance()
+        val calendar = Calendar.getInstance(Locale(MainActivity.lang))
 
         dateTextView.text =
-            SimpleDateFormat("MMMM.dd  hh:mm aaa", Locale.getDefault()).format(calendar.time)
+            SimpleDateFormat("MMMM.dd  hh:mm aaa", Locale(MainActivity.lang)).format(calendar.time)
 
 
         val iconUrl =
@@ -162,7 +158,7 @@ class TodayFragment : Fragment() {
 
 
     private fun getDrawable(baseWeather: BaseWeather): Drawable {
-        var description: String =baseWeather.current.weather[0].main
+        val description: String =baseWeather.current.weather[0].main
 
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = baseWeather.current.dt.toLong()*1000

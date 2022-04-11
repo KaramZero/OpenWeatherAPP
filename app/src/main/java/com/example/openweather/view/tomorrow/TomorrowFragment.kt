@@ -4,7 +4,6 @@ import android.graphics.drawable.Drawable
 import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -21,7 +20,7 @@ import com.example.openweather.R
 import com.example.openweather.model.pojo.weather_pojo.BaseWeather
 import com.example.openweather.view.MainActivity
 import com.example.openweather.view.today.AllDayRecyclerAdapter
-import java.text.DecimalFormat
+import java.text.NumberFormat
 import java.util.*
 
 
@@ -90,40 +89,41 @@ class TomorrowFragment : Fragment() {
     }
 
     private fun setWeather(baseWeather: BaseWeather){
-        val geocoder = Geocoder(this.context, Locale.getDefault())
+        val geocoder = Geocoder(this.context, Locale(MainActivity.lang))
         val addresses: List<Address>? = geocoder.getFromLocation(baseWeather.lat, baseWeather.lon, 1)
         locationTextView.text = addresses!![0].locality
+        val numberFormat = NumberFormat.getInstance(Locale(MainActivity.lang))
 
         descriptionTextView.text = baseWeather.daily[1].weather[0].description
-        humidityTextView.text = DecimalFormat("#").format(baseWeather.daily[1].humidity).toString()
-        pressureTextView.text = DecimalFormat("#").format(baseWeather.daily[1].pressure).toString()
-        cloudTextView.text = DecimalFormat("#").format(baseWeather.daily[1].clouds).toString()
+        humidityTextView.text = numberFormat.format(baseWeather.daily[1].humidity).toString()
+        pressureTextView.text = numberFormat.format(baseWeather.daily[1].pressure).toString()
+        cloudTextView.text = numberFormat.format(baseWeather.daily[1].clouds).toString()
 
 
         when(MainActivity.speedUnit){
-            "meterSec" -> windTextView.text = DecimalFormat("#").format(baseWeather.daily[1].wind_speed).toString()
-            "milesHour" -> windTextView.text = DecimalFormat("#").format(baseWeather.daily[1].wind_speed*2.237).toString()
+            "meterSec" -> windTextView.text = numberFormat.format(baseWeather.daily[1].wind_speed).toString()
+            "milesHour" -> windTextView.text = numberFormat.format(baseWeather.daily[1].wind_speed*2.237).toString()
         }
 
         when(MainActivity.tempUnit){
             "celsius" -> {
-                tempTextView.text = DecimalFormat("#").format(baseWeather.daily[1].temp.day - 273.15).toString()
-                feelsLikeTextView.text = (baseWeather.daily[1].feels_like.day - 273.15).toInt().toString()
+                tempTextView.text = numberFormat.format((baseWeather.daily[1].temp.day - 273.15).toInt()).toString()
+                feelsLikeTextView.text = numberFormat.format((baseWeather.daily[1].feels_like.day - 273.15).toInt()).toString()
                 unitTextView.text = "c"
             }
             "fahrenheit" -> {
-                tempTextView.text = DecimalFormat("#").format((baseWeather.daily[1].temp.day - 273.15)*9/5+32).toString()
-                feelsLikeTextView.text = DecimalFormat("#").format((baseWeather.daily[1].feels_like.day- 273.15)*9/5+32).toString()
+                tempTextView.text = numberFormat.format(((baseWeather.daily[1].temp.day - 273.15)*9/5+32).toInt()).toString()
+                feelsLikeTextView.text = numberFormat.format(((baseWeather.daily[1].feels_like.day- 273.15)*9/5+32).toInt()).toString()
                 unitTextView.text = "f"
             }
             "kelvin" -> {
-                tempTextView.text = DecimalFormat("#").format(baseWeather.daily[1].temp.day).toString()
-                feelsLikeTextView.text = DecimalFormat("#").format(baseWeather.daily[1].feels_like.day).toString()
+                tempTextView.text = numberFormat.format((baseWeather.daily[1].temp.day).toInt()).toString()
+                feelsLikeTextView.text = numberFormat.format((baseWeather.daily[1].feels_like.day).toInt()).toString()
                 unitTextView.text = "k"
             }
         }
 
-        var iconUrl =
+        val iconUrl =
             "https://openweathermap.org/img/wn/${baseWeather.daily[1].weather[0].icon}@2x.png"
 
         Glide.with(myView.context).load(iconUrl)

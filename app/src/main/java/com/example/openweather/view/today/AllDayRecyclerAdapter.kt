@@ -1,7 +1,6 @@
 package com.example.openweather.view.today
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.openweather.R
 import com.example.openweather.model.pojo.weather_pojo.Hourly
 import com.example.openweather.view.MainActivity
-import java.text.DecimalFormat
+import java.text.NumberFormat
 import java.util.*
 import kotlin.Int
 import kotlin.collections.ArrayList
@@ -22,7 +21,7 @@ class AllDayRecyclerAdapter(
 ) : RecyclerView.Adapter<AllDayRecyclerAdapter.ViewHolder>() {
 
     private var hourlyTempList: List<Hourly> = ArrayList()
-    private var interval : Int = 0
+    private var interval: Int = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -32,7 +31,7 @@ class AllDayRecyclerAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        val index= position+interval
+        val index = position + interval
         val iconUrl =
             "https://openweathermap.org/img/wn/${hourlyTempList[index].weather[0].icon}@2x.png"
         Glide.with(context).load(iconUrl)
@@ -42,36 +41,39 @@ class AllDayRecyclerAdapter(
                     .error(R.drawable.ic_launcher_foreground)
             )
             .into(holder.imageView)
+        val numberFormat = NumberFormat.getInstance(Locale(MainActivity.lang))
 
-        when(MainActivity.tempUnit){
+        when (MainActivity.tempUnit) {
             "celsius" -> {
-                holder.temp.text = DecimalFormat("#").format(hourlyTempList[index].temp- 273.15).toString()
+                holder.temp.text =
+                    numberFormat.format((hourlyTempList[index].temp - 273.15).toInt()).toString()
             }
             "fahrenheit" -> {
-                holder.temp.text = DecimalFormat("#").format((hourlyTempList[index].temp - 273.15)*9/5+32).toString()
+                holder.temp.text =
+                    numberFormat.format(((hourlyTempList[index].temp - 273.15).toInt()) * 9 / 5 + 32)
+                        .toString()
             }
             "kelvin" -> {
-                holder.temp.text = DecimalFormat("#").format(hourlyTempList[index].temp).toString()
+                holder.temp.text = numberFormat.format((hourlyTempList[index].temp).toInt()).toString()
             }
         }
 
         val calendar = Calendar.getInstance()
-        calendar.timeInMillis =hourlyTempList[index].dt.toLong()*1000
+        calendar.timeInMillis = hourlyTempList[index].dt.toLong() * 1000
         val hour = calendar.get(Calendar.HOUR)
 
-      //  Log.i("TAG", "onBindViewHolder: ${calendar.time}  ,hours: $hour index: $index")
-        holder.hour.text = DecimalFormat("#").format(hour).toString()
-
+        //  Log.i("TAG", "onBindViewHolder: ${calendar.time}  ,hours: $hour index: $index")
+        holder.hour.text = numberFormat.format(hour).toString()
 
 
     }
 
     override fun getItemCount(): Int {
-        return hourlyTempList.size/2
+        return hourlyTempList.size / 2
     }
 
 
-    fun setHourlyTempList(hourlyTempList: List<Hourly>,interval:Int = 0) {
+    fun setHourlyTempList(hourlyTempList: List<Hourly>, interval: Int = 0) {
         this.interval = interval
         this.hourlyTempList = hourlyTempList
     }

@@ -1,17 +1,14 @@
 package com.example.openweather.view.fav_locations
 
-import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.openweather.R
 import com.example.openweather.model.pojo.Location
-import com.example.openweather.model.pojo.weather_pojo.Hourly
 import com.example.openweather.view.MainActivity
 import kotlin.Int
 import kotlin.collections.ArrayList
@@ -42,14 +39,17 @@ class FavLocationsRecyclerAdapter(var appCompatActivity: AppCompatActivity) : Re
 
    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var locationName: TextView = itemView.findViewById(R.id.locationName)
-        var button : Button = itemView.findViewById(R.id.removeLocation)
+        private var button : ImageView = itemView.findViewById(R.id.removeLocation)
 
         init {
+
             itemView.setOnClickListener{
+                FavLocations.disableGPS(locationsList[adapterPosition])
+
                 MainActivity.weatherViewModel.getWeather(locationsList[adapterPosition].lat.toString(), locationsList[adapterPosition].lon.toString(),
                     MainActivity.lang
                 )
-                FavLocations.disableGPS(locationsList[adapterPosition])
+
                 appCompatActivity.finish()
             }
             button.setOnClickListener{

@@ -2,7 +2,6 @@ package com.example.openweather.model.local_source
 
 import android.content.Context
 import android.util.Log
-import androidx.lifecycle.LiveData
 import com.example.openweather.model.pojo.LastKnownWeather
 import com.example.openweather.model.pojo.Location
 

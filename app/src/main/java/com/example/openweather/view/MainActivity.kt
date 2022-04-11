@@ -1,20 +1,19 @@
 package com.example.openweather.view
 
 import android.Manifest
-import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.drawerlayout.widget.DrawerLayout.DrawerListener
 import androidx.lifecycle.LifecycleOwner
@@ -24,9 +23,10 @@ import androidx.viewpager.widget.ViewPager
 import com.example.openweather.databinding.ActivityMainBinding
 import com.example.openweather.model.local_source.LocationsLocal
 import com.example.openweather.model.pojo.Location
-import com.example.openweather.model.remote_source.WeatherRemote
+import com.example.openweather.model.remote_source.MovieClient
 import com.example.openweather.model.repo.GpsRepo
 import com.example.openweather.model.repo.WeatherRepo
+import com.example.openweather.view.alerts.Alerts
 import com.example.openweather.view.fav_locations.FavLocations
 import com.example.openweather.view.main.SectionsPagerAdapter
 import com.example.openweather.view_model.gps_view_model.GpsViewModel
@@ -44,6 +44,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var fab: FloatingActionButton
+    private lateinit var fabAlert: FloatingActionButton
+    private lateinit var fabMaps: FloatingActionButton
     private lateinit var drawerMenuFab: FloatingActionButton
     private lateinit var drawerLayout: DrawerLayout
 
@@ -99,6 +101,7 @@ class MainActivity : AppCompatActivity() {
             config.setLocale(locale)
             resources.updateConfiguration(config, resources.displayMetrics)
         }
+
         initViewPager()
 
         initFloatingButtons()
@@ -120,14 +123,17 @@ class MainActivity : AppCompatActivity() {
 
         }
         gpsViewModel.location.observe(this) {
+            settings.edit().putString("lat",it.lat.toString())
+                .putString("lon",it.lon.toString()).apply()
             weatherViewModel.getWeather(it.lat.toString(), it.lon.toString(),lang)
         }
+
 
     }
 
     override fun onResume() {
         super.onResume()
-        Log.i("TAG", "onResume: ${Locale.getDefault().language}  $lang")
+
         if(_lang != lang) {
             gpsViewModel.location.removeObservers(this)
             val locale = Locale(lang)
@@ -137,8 +143,10 @@ class MainActivity : AppCompatActivity() {
             config.setLocale(locale)
             resources.updateConfiguration(config, resources.displayMetrics)
             finish()
-            startActivity(intent);
+            startActivity(intent)
         }
+
+        reload(getSharedPreferences("Settings", MODE_PRIVATE))
     }
 
 
@@ -148,8 +156,9 @@ class MainActivity : AppCompatActivity() {
         gpsViewModel =ViewModelProvider(this,gpsViewModelFactory)[GpsViewModel::class.java]
 
 
-        val weatherViewModelFactory = WeatherViewModelFactory(WeatherRemote.getInstance()
-            ?.let { WeatherRepo.getInstance(this, it) }!!,LocationsLocal.getInstance(this))
+        val weatherViewModelFactory = WeatherViewModelFactory(
+            MovieClient.getInstance()
+                .let { WeatherRepo.getInstance(this, it) }!!,LocationsLocal.getInstance(this))
 
         weatherViewModel = ViewModelProvider(this,weatherViewModelFactory)[WeatherViewModel::class.java]
 
@@ -166,16 +175,49 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initFloatingButtons(){
-         drawerMenuFab = binding.menuFab
-         fab = binding.fab
+        drawerMenuFab = binding.menuFab
+        fab = binding.fab
+        fab.rotation = 45F
+        fabAlert = binding.fabAlert
+        fabMaps = binding.fabMaps
+
+        fab.setOnClickListener {
+            if (fabAlert.isVisible) {
+                fabMaps.hide()
+                fabAlert.hide()
+                fab.rotation = 45F
+            }else{
+                fabMaps.show()
+                fabAlert.show()
+                fab.rotation = 0F
+            }
+        }
 
         drawerMenuFab.setOnClickListener {
             drawerLayout.open()
+            if (fabAlert.isVisible) {
+                fabMaps.hide()
+                fabAlert.hide()
+                fab.rotation = 45F
+            }
         }
-        fab.setOnClickListener{
+        fabMaps.setOnClickListener{
            val intent = Intent(this, GoogleMapsActivity::class.java)
            startActivity(intent)
+                fabMaps.hide()
+                fabAlert.hide()
+                fab.rotation = 45F
+
         }
+
+        fabAlert.setOnClickListener{
+            val intent = Intent(this, Alerts::class.java)
+            startActivity(intent)
+            fabMaps.hide()
+            fabAlert.hide()
+            fab.rotation = 45F
+        }
+
 
     }
 
@@ -240,7 +282,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onAboutUsClicked(item: MenuItem) {
-        Toast.makeText(this,"Coming Soon :)",Toast.LENGTH_SHORT).show()
+        Toast.makeText(this,"Alex ITI says Hello  :)",Toast.LENGTH_SHORT).show()
         drawerLayout.close()
     }
 

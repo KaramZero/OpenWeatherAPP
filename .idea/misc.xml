@@ -13,6 +13,7 @@
         <entry key="..\:/ITI/OpenWeather/app/src/main/res/drawable/wind.xml" value="0.1225" />
         <entry key="..\:/ITI/OpenWeather/app/src/main/res/layout-w1240dp/content_scrolling.xml" value="0.21875" />
         <entry key="..\:/ITI/OpenWeather/app/src/main/res/layout-w936dp/content_scrolling.xml" value="0.1947261663286004" />
+        <entry key="..\:/ITI/OpenWeather/app/src/main/res/layout/activity_alerts.xml" value="0.2" />
         <entry key="..\:/ITI/OpenWeather/app/src/main/res/layout/activity_fav_locations.xml" value="0.1" />
         <entry key="..\:/ITI/OpenWeather/app/src/main/res/layout/activity_google_maps.xml" value="0.10989583333333333" />
         <entry key="..\:/ITI/OpenWeather/app/src/main/res/layout/activity_main.xml" value="0.264" />
@@ -32,6 +33,7 @@
         <entry key="..\:/ITI/OpenWeather/app/src/main/res/layout/seven_days_list_item.xml" value="0.536" />
         <entry key="..\:/ITI/OpenWeather/app/src/main/res/menu/activity_main_drawer.xml" value="0.264" />
         <entry key="..\:/ITI/OpenWeather/app/src/main/res/menu/main.xml" value="0.25" />
+        <entry key="..\:/ITI/OpenWeather/app/src/main/res/menu/menu_alerts.xml" value="0.13177083333333334" />
         <entry key="..\:/ITI/OpenWeather/app/src/main/res/menu/menu_fav_locations.xml" value="0.25" />
       </map>
     </option>

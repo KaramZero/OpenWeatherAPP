@@ -11,13 +11,15 @@ data class BaseWeather(
     @SerializedName("timezone")
     var timezone :String,
     @SerializedName("timezone_offset")
-    var timezone_offset :Double,
+    var timezone_offset: Double,
     @SerializedName("current")
-    var current : Current,
+    var current: Current,
     @Ignore
     @SerializedName("hourly")
-   var hourly :List<Hourly>,
+    var hourly: List<Hourly>,
     @Ignore
     @SerializedName("daily")
-   var daily :List<Daily>
+    var daily: List<Daily>,
+    @SerializedName("alerts")
+    var alert: List<AlertWeather>?
 )

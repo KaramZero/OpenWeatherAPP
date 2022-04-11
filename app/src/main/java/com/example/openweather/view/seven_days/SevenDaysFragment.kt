@@ -8,21 +8,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.openweather.R
 import com.example.openweather.model.pojo.weather_pojo.Daily
 import com.example.openweather.view.MainActivity
-import com.example.openweather.view.today.AllDayRecyclerAdapter
-import java.text.DecimalFormat
+import java.text.NumberFormat
+import java.util.*
 
 
 class SevenDaysFragment : Fragment() {
 
     private lateinit var adapter: SevenDaysRecyclerAdapter
 
-    lateinit var myView: View
+    private lateinit var myView: View
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,15 +51,16 @@ class SevenDaysFragment : Fragment() {
 
         val dialog = Dialog(requireContext())
         dialog.setContentView(R.layout.seven_days_hourly_list)
+        val numberFormat = NumberFormat.getInstance(Locale(MainActivity.lang))
 
         val humidityTextView: TextView = dialog.findViewById(R.id.seven_humidity)
         val cloudTextView: TextView = dialog.findViewById(R.id.seven_cloud)
         val pressureTextView: TextView = dialog.findViewById(R.id.seven_pressure)
         val windTextView: TextView = dialog.findViewById(R.id.seven_wind)
-        humidityTextView.text = DecimalFormat("#").format(daily.humidity).toString()
-        cloudTextView.text = DecimalFormat("#").format(daily.clouds).toString()
-        pressureTextView.text = DecimalFormat("#").format(daily.pressure).toString()
-        windTextView.text = DecimalFormat("#").format(daily.wind_speed).toString()
+        humidityTextView.text = numberFormat.format(daily.humidity).toString()
+        cloudTextView.text = numberFormat.format(daily.clouds).toString()
+        pressureTextView.text = numberFormat.format(daily.pressure).toString()
+        windTextView.text = numberFormat.format(daily.wind_speed.toInt()).toString()
 
         dialog.show()
         val window: Window? = dialog.window

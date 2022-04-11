@@ -5,7 +5,6 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,7 +15,7 @@ import com.example.openweather.view.MainActivity
 
 class FavLocations : AppCompatActivity() {
 
-    lateinit var floatingActionButton: FloatingActionButton
+    private lateinit var floatingActionButton: FloatingActionButton
     private lateinit var adapter : FavLocationsRecyclerAdapter
 
     companion object{
@@ -48,14 +47,14 @@ class FavLocations : AppCompatActivity() {
 
         floatingActionButton = findViewById(R.id.addNewLocationFab)
 
-        floatingActionButton.setOnClickListener { view ->
+        floatingActionButton.setOnClickListener {
             startActivity(Intent(this,GoogleMapsActivity::class.java))
         }
 
         val button :Button = findViewById(R.id.useGPSButton)
         button.setOnClickListener{
-            MainActivity.gpsViewModel.getLocation()
             settings.edit().putBoolean("gpsMode",true).apply()
+            MainActivity.gpsViewModel.getLocation()
             finish()
         }
     }
