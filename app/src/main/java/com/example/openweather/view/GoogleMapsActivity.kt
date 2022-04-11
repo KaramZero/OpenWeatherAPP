@@ -87,7 +87,7 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 val addresses: List<Address>?
                 try {
                     addresses = geocoder.getFromLocation(p0.latitude, p0.longitude, 1)
-                    if (!addresses.isNullOrEmpty()) {
+                    if (!addresses.isNullOrEmpty()&& addresses[0].locality != null) {
                         pickedLocationTextView.text = addresses[0].locality
                         marker.title = addresses[0].locality
                         location.lat = p0.latitude
