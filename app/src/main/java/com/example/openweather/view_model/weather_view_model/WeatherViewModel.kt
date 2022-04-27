@@ -5,8 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.openweather.model.local_source.LocalSource
-import com.example.openweather.model.pojo.LastKnownWeather
 import com.example.openweather.model.pojo.Location
 import com.example.openweather.model.pojo.weather_pojo.BaseWeather
 import com.example.openweather.model.repo.WeatherRepo
@@ -26,6 +24,7 @@ class WeatherViewModel(private var weatherRepo: WeatherRepo) : ViewModel() {
     fun getWeather(lat : String, lon : String,lang :String){
         viewModelScope.launch {
             withContext(Dispatchers.IO){
+                Log.i("TAG", "getWeather:  ")
                 _lastWeather.postValue(weatherRepo.getWeather(lat,lon,lang))
             }
         }
