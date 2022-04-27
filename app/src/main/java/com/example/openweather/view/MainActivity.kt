@@ -158,7 +158,7 @@ class MainActivity : AppCompatActivity() {
 
         val weatherViewModelFactory = WeatherViewModelFactory(
             MovieClient.getInstance()
-                .let { WeatherRepo.getInstance(this, it) }!!,LocationsLocal.getInstance(this))
+                .let { WeatherRepo.getInstance(this, it,LocationsLocal.getInstance(this)) }!!)
 
         weatherViewModel = ViewModelProvider(this,weatherViewModelFactory)[WeatherViewModel::class.java]
 

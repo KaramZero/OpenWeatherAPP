@@ -15,7 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class WeatherViewModel(private var weatherRepo: WeatherRepo, private var localSource: LocalSource) : ViewModel() {
+class WeatherViewModel(private var weatherRepo: WeatherRepo) : ViewModel() {
 
     private var _lastWeather = MutableLiveData<BaseWeather>()
     var lastWeather :LiveData<BaseWeather> = _lastWeather
@@ -30,16 +30,17 @@ class WeatherViewModel(private var weatherRepo: WeatherRepo, private var localSo
             }
         }
     }
+
     fun insertLocation(location: Location){
-        localSource.insertLocation(location)
+        weatherRepo.insertLocation(location)
     }
     fun deleteLocation(location: Location){
-        localSource.deleteLocation(location)
+        weatherRepo.deleteLocation(location)
     }
     fun getAllStoredLocations(){
         viewModelScope.launch {
             withContext(Dispatchers.IO){
-                _storedLocations.postValue(localSource.getAllStoredLocations())
+                _storedLocations.postValue(weatherRepo.getAllStoredLocations())
                 Log.i("TAG", "getAllStoredLocations: size ${_storedLocations.value?.size}")
             }
         }
@@ -48,12 +49,9 @@ class WeatherViewModel(private var weatherRepo: WeatherRepo, private var localSo
 
     fun insertWeather(weather: BaseWeather){
         viewModelScope.launch {
-            val gson = Gson()
-            val weatherSTR:String = gson.toJson(weather)
-
             withContext(Dispatchers.IO){
                 Log.i("TAG", "insertWeather: Done ")
-                localSource.insertWeather(LastKnownWeather(data = weatherSTR))
+                weatherRepo.insertWeather(weather)
             }
 
         }
@@ -62,7 +60,7 @@ class WeatherViewModel(private var weatherRepo: WeatherRepo, private var localSo
     fun getLastWeather(){
         viewModelScope.launch {
             withContext(Dispatchers.IO){
-                val lastKnownWeather = localSource.getLastWeather()
+                val lastKnownWeather = weatherRepo.getLastWeather()
                 if(lastKnownWeather != null){
                 Log.i("TAG", "getLastWeather: Done $lastKnownWeather")
                 val gson = Gson()
